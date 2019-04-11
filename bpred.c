@@ -323,7 +323,9 @@ void bpred_dir_config(
             break;
 
         case BPredPerc:
-            fprintf(stream, "pred_dir: %s: perc-sz: %d weight-sz: %d shift_wd: %d", name, pred_dir->config.perc.psize, pred_dir->config.perc.wsize, pred_dir->config.perc.shift_width);
+            fprintf(stream, "pred_dir: %s: perc-sz: %d weight-sz: %d shift_wd: %d", name,
+                    pred_dir->config.perc.psize, pred_dir->config.perc.wsize,
+                    pred_dir->config.perc.shift_width);
 
         case BPredTaken:
             fprintf(stream, "pred_dir: %s: predict taken\n", name);
@@ -574,18 +576,18 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
             }
             break;
         case BPredPerc:
-            int perceptron, y;
-            perceptron = &pred_dir->config.perc.ptable[BIMOD_HASH(pred_dir, baddr)];
-            /* STOPPED HERE
-             * First we need to compute the output. This was implemented wrong the first time
-             * but the actual way to do this is to add. Indexing into the pointer array needs
-             * some thought. Then all that is left is to update the Perceptron table once
-             * everythign is done.
-             * Note: p on line 573 is our prediction state information. It is used in the update.
-             * I am still not sure if enough information is available in p. Research this. */
-            
-            
-            
+            int *perceptron, *history, y, hash;
+            hash = ((((baddr) >> 19) ^ ((baddr) >> MD_BR_SHIFT)) & (pred_dir->config.perc.psize - 1))
+            perceptron = &pred_dir->config.perc.ptable[hash];
+            history = &pred_dir->config.perc.shiftregs;
+            y = 0;
+            for (int i = 0; i < pred_dir->config.perc.wsize; i++,history++,perceptron++) {
+                a = *history;b = *perceptron;
+                y += a * b;
+            }
+
+
+            break;
         case BPred2bit:
             p = &pred_dir->config.bimod.table[BIMOD_HASH(pred_dir, baddr)];
             break;
