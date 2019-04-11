@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+# Vim Files
+*.swp
+*.swo
+*.swn
+
 # Object files
 *.o
 *.ko
