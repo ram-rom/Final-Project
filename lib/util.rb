@@ -22,6 +22,25 @@ module Lib
       raise "\n\n\nError: '#{cmd_str}' failed with '#{output}'" unless $?.exitstatus == 0
       output
     end
+
+    def self.help_header
+      "\nSYNOPSIS"
+    end
+
+    def self.help_footer
+<<-TAIL
+
+DESCRIPTION
+  These are the options you can pass to ram-rom. You can only run one command at a time. Some commands have extra options.
+
+  COMMANDS
+  --install
+    This should only need to be done once or if you want a fresh install.
+
+  --compile
+    Run this each time you want to compile simple scalar with your changes.
+TAIL
+    end
   end
 end
 
