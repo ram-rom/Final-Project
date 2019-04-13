@@ -106,7 +106,7 @@ bpred_create(enum bpred_class class,     /* type of predictor to create */
 
         case BPredPerc:
             pred->dirpred.bimod =
-                bpred_dir_create(BPredPerc, l1size, l2size, shift_width, xor);
+                bpred_dir_create(BPredPerc, l1size, l2size, shift_width, 0);
 
             break;
 
@@ -242,13 +242,13 @@ bpred_dir_create(
             }
         case BPredPerc:
             {
-                if (!psize)
-                    fatal("perceptron table size, '%d', must be non-zero", psize);
-                pred_dir->config.perc.psize = psize;
+                if (!l1size)
+                    fatal("perceptron table size, '%d', must be non-zero", l1size);
+                pred_dir->config.perc.psize = l1size;
 
-                if (!wsize)
-                    fatal("weight size, '%d', must be non-zero", wsize);
-                pred_dir->config.perc.wsize = wsize;
+                if (!l2size)
+                    fatal("weight size, '%d', must be non-zero", l2size);
+                pred_dir->config.perc.wsize = l2size;
 
                 if (!shift_width || shift_width > 0)
                     fatal("ghr size, '%d', must be non-zero", shift_width);
@@ -260,13 +260,13 @@ bpred_dir_create(
                     fatal("cannot allocate history table");
 
                 /* Perceptron Table */
-                pred_dir->config.two.ptable = calloc(psize, wsize*sizeof(long));
+                pred_dir->config.two.ptable = calloc(l1size, l2size*sizeof(long));
                 if (!pred_dir->config.two.ptable)
                     fatal("cannot allocate perceptron table");
 
                 /* Initialize Perceptron table */
-                for (int p = 0; p < psize; cnt++) {
-                    for (int w = 0; w < wsize; w++) {
+                for (int p = 0; p < l1size; cnt++) {
+                    for (int w = 0; w < l2size; w++) {
                         *pred_dir->config.two.ptable[p][w] = 0;
                     }
                 }
@@ -537,9 +537,7 @@ void bpred_after_priming(struct bpred_t * bpred)
 struct perc_p {
     int t;
     int y;
-    int size;
-    int *perc;
-    int *history;
+    int hash;
 };
 
 /* predicts a branch direction */
@@ -595,14 +593,12 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
             }
             /* Need to pass to update
              * 1. t -> 1 if out >= 0 or -1 otherwise
-             * 2. perceptron -> table of weights 
-             * 3. y -> used for deciding training 
-             * 4. Number of weights in perceptron */
+             * 2. y -> used for deciding training 
+             * 3. hash -> hash to get exact perceptron */
             perc_p *p_temp;
+            p_temp->y = y;
             p_temp->t = y >= 0 ? 1 : -1;
-            p_temp->size = pred_dir->config.perc.wsize;
-            p_temp->history = &pred_dir->config.perc.shiftregs;
-            p_temp->perceptron = &pred_dir->config.perc.ptable[hash];
+            p_temp->hash = hash;
             p = (char *) p_temp;
             break;
         case BPred2bit:
@@ -989,9 +985,9 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
     {
         if (pred->class == BPredPerc) {
             perc_p *p = (perc_p) dir_update_ptr->pdir1;
-            int y = p->y; int t = p->t; int size = p->size;
-            int  *history = p->history;
-            int *perceptron = p->perceptron;
+            int y = p->y; int t = p->t; int size = pred->dirpred.bimod->config.perc.wsize;
+            int  *history = pred->dirpred.bimod->config.perc.shiftregs;
+            int *perceptron = pred->dirpred.bimod->config.perc.ptable[p->hash];
             /* Do training if necessary */
             if (!sign(y, t) || abs(y) <= THETA) {
                 for (int i = 0; i < size; i++, history++, perceptron++) {
@@ -1000,7 +996,8 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
                 }
             }
             /* Update shift register */
-            /* TODO: Figure out how to do this */
+            pred->dirpred.bimod->config.perc.shiftregs <<= 1;
+            pred->dirpred.bimod->config.perc.shiftregs |= taken;
         }
         if (taken)
         {
