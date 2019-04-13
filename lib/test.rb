@@ -22,26 +22,30 @@ module Lib
     def run_tests(path, name, predictor)
       raise ArgumentError.new("Required arguments not present: path, name, and predictor") if !path || !name || !predictor
 
-      tests        = get_tests_from_path(path)
       test_run_dir = "#{@@TEST_DIR}/#{name}"
+      error_file   = "#{test_run_dir}/errors.txt"
 
       error "#{name} already exists in #{@@TEST_DIR}. Delete these manually or rename your test run!" if Dir.exists?(test_run_dir)
 
       cmd('mkdir', '-p', test_run_dir)
 
-      info "Running #{tests.count} tests for #{name}"
+      tests  = get_tests_from_path(path)
       failed = 0
+      info "Running #{tests.count} tests for #{name}"
       tests.each_with_index do |test, index|
         begin
           program_name = File.basename(test)
           info "  #{index + 1} Running '#{program_name}'..."
+          output_file = "#{test_run_dir}/#{program_name}.run", predictor
           cmd(@@SIM_OUT_ORDER, '-bpred', predictor, test, '>', output_file, display: false)
         rescue CommandExecutionError => e
-          File.open("#{test_run_dir}/errors.txt", 'a') { |file| file.write( "#{e}\n" ) }
+          failed += 1
+          File.open(error_file, 'a') { |file| file.write( "#{e}\n" ) }
         end
       end
 
-      info "Completed"
+      info "Completed - Failed: #{failed}, Successful: #{tests.count - failed}, Total: #{tests.count}"
+      info "See #{error_file} for details" if failed > 0
     end
 
     def get_tests_from_path(path)
