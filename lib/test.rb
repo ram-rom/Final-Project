@@ -33,7 +33,7 @@ module Lib
         begin
           program_name = File.basename(test)
           info "  #{index + 1} Running '#{program_name}'..."
-          cmd(@@SIM_OUT_ORDER, test, '>', "#{test_run_dir}/#{program_name}_test.run", display: false)
+          cmd(@@SIM_OUT_ORDER, test, '>', "#{test_run_dir}/#{program_name}.run", display: false)
         rescue CommandExecutionError => e
           File.open("#{test_run_dir}/errors.txt", 'a') { |file| file.write( "#{e}\n" ) }
         end

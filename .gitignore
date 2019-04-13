@@ -3,6 +3,7 @@
 
 # Generate Files
 simplescalar
+*_test_runs
 
 # Vim Files
 *.swp
