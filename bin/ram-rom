@@ -3,13 +3,16 @@
 require 'pry'
 require 'optparse'
 require_relative '../lib/install'
+require_relative '../lib/compile'
 
 def main(argv)
   OptionParser.new do |opts|
     opts.banner = "Usage: ram-rom [options]"
-    opts.on('-i', '--install', "Install SuperScalar") do
-      installer = Lib::Installer.new
-      installer.run
+    opts.on('-i', '--install', "Install SimpleScalar") do
+      Lib::Installer.new.run
+    end
+    opts.on('-i', '--compile', "Compile SimpleScaler") do
+      Lib::Compiler.new.run
     end
   end.parse!(argv)
 end
