@@ -2,11 +2,16 @@ module Lib
   module Util
     @@HOST              = "i386-*-gnu/linux"
     @@ROOT_DIR          = %x{git rev-parse --show-toplevel}.chomp
+
     @@TAR_DIR           = "#{@@ROOT_DIR}/tar_files"
     @@SIMPLE_SCALAR_DIR = "#{@@ROOT_DIR}/simplescalar"
-    @@SIMPLE_SIM_DIR    = "#{@@SIMPLE_SCALAR_DIR}/simplesim-3.0/"
+    @@SIMPLE_SIM_DIR    = "#{@@SIMPLE_SCALAR_DIR}/simplesim-3.0"
     @@SRC_DIR           = "#{@@ROOT_DIR}/src"
+
     @@SRC_FILES         = ['bpred.c', 'bpred.h']
+
+    @@SIM_OUT_ORDER     = "#{@@SIMPLE_SIM_DIR}/sim-outorder"
+    @@DEFAULT_TEST      = "#{@@SIMPLE_SIM_DIR}/tests-alpha/bin/test-math"
 
     def info(msg)
       puts "#{msg}\n"
@@ -31,7 +36,8 @@ module Lib
 <<-TAIL
 
 DESCRIPTION
-  These are the options you can pass to ram-rom. You can only run one command at a time. Some commands have extra options.
+  These are the options you can pass to ram-rom. You can only run one command at a time.
+  Some commands have extra options.
 
   COMMANDS
   --install
@@ -39,6 +45,11 @@ DESCRIPTION
 
   --compile
     Run this each time you want to compile simple scalar with your changes.
+
+  --simple-test
+    Run this after you compile. This will run the benchmark test-math. This is used as a
+    good sanity check that your code runs. Note this will output the statistics to stdout.
+
 TAIL
     end
   end

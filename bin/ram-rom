@@ -21,11 +21,11 @@ def parse_arguments(argv)
     end
 
     opts.on('-c', '--compile', "Command to compile simple scaler") do
-      opts[:command] = :compile
+      options[:command] = :compile
     end
 
-    opts.on('-t', '--test', "Command to run a particular test through simple scalar") do
-      opts[:command] = :compile
+    opts.on('-s', '--simple-test', "Command to run a simple test") do |path|
+      options[:command] = :test
     end
 
     opts.on_tail(Lib::Util.help_footer)
@@ -41,12 +41,15 @@ def main(argv)
 
   opts    = parse_arguments(argv)
   command = opts[:command]
+  params  = opts[:params] || {}
 
   case command
   when :install
       Lib::Installer.new.run
   when :compile
       Lib::Compiler.new.run
+  when :test
+      Lib::Test.new.run(params)
   end
 end
 
