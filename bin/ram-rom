@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require 'pry'
+require 'optparse'
+require_relative '../lib/install'
+
+def main(argv)
+  OptionParser.new do |opts|
+    opts.banner = "Usage: ram-rom [options]"
+    opts.on('-i', '--install', "Install SuperScalar") do
+      installer = Lib::Installer.new
+      installer.run
+    end
+  end.parse!(argv)
+end
+
+main(ARGV)  if $0 == __FILE__
+
