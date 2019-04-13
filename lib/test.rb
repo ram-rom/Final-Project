@@ -5,13 +5,21 @@ module Lib
     include Util
 
     def run(path: nil)
-      path ||= @@DEFAULT_TEST
+      if path.nil?
+        run_simple_test
+      else
+        run_tests(path)
+      end
+    end
 
-      error "'#{path}' must point to a file" unless File.file?(path)
+    def run_tests(path)
+      cmd('mkdir', '-p', "#{ENV['USER']}_test_runs")
+    end
 
-      info "*** Started Running Test for #{path} ***"
-      cmd(@@SIM_OUT_ORDER, path)
-      info "*** Finished Running Test ***"
+    def run_simple_test
+      info "*** Started Running Simple Math Test ***"
+      cmd(@@SIM_OUT_ORDER, @@DEFAULT_TEST)
+      info "*** Finished Running Simple Test ***"
     end
   end
 end

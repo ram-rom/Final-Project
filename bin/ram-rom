@@ -9,23 +9,26 @@ def load_environment
 end
 
 def parse_arguments(argv)
-  options = {}
+  command = []
+  params  = {}
 
   argv << '-h' if argv.empty?
+
   parser = OptionParser.new do |opts|
     opts.banner = "Usage: ram-rom [command] [options]"
 
     opts.on_head(Lib::Util.help_header)
+
     opts.on('-i', '--install', "Command to install simple scalar") do
-      options[:command] = :install
+      command.push(:install)
     end
 
     opts.on('-c', '--compile', "Command to compile simple scaler") do
-      options[:command] = :compile
+      command.push(:compile)
     end
 
-    opts.on('-s', '--simple-test', "Command to run a simple test") do |path|
-      options[:command] = :test
+    opts.on('-s', '--simple-test', "Command to run a simple test") do
+      command.push(:test)
     end
 
     opts.on_tail(Lib::Util.help_footer)
@@ -33,7 +36,12 @@ def parse_arguments(argv)
 
   parser.parse!(argv)
 
-  options
+  abort "Error: You can only run one command at time" unless command.length == 1
+
+  {
+    command: command.first,
+    params: params
+  }
 end
 
 def main(argv)
