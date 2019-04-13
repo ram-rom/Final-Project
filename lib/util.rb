@@ -1,5 +1,9 @@
+require_relative 'errors'
+
 module Lib
   module Util
+    include Errors
+
     @@HOST              = "i386-*-gnu/linux"
     @@ROOT_DIR          = %x{git rev-parse --show-toplevel}.chomp
 
@@ -23,8 +27,8 @@ module Lib
 
     def cmd(*parts)
       cmd_str = parts.join(" ")
-      output  = system("#{cmd_str} 2>&1")
-      raise "\n\n\nError: '#{cmd_str}' failed with '#{output}'" unless $?.exitstatus == 0
+      output  = %x{#{cmd_str} 2>&1}
+      raise CommandExecutionError.new(cmd_str, output, $?.exitstatus) unless $?.exitstatus == 0
       output
     end
 
@@ -49,6 +53,17 @@ DESCRIPTION
   --simple-test
     Run this after you compile. This will run the benchmark test-math. This is used as a
     good sanity check that your code runs. Note this will output the statistics to stdout.
+
+  --test <path>
+    <path> can be a directory or a particular test. If <path> is a directory it will run
+    each program in that directory under simplescalar. If <path> is file it will only run
+    that program.
+
+  PARAMS
+  --name
+    Name the current test run. Use this param with --test. This will create a directory under
+    #{ENV['USER']}_test_runs. Each program run will be prefaced with the program name along with
+    #runtime parameters.
 
 TAIL
     end

@@ -31,6 +31,17 @@ def parse_arguments(argv)
       command.push(:test)
     end
 
+    opts.on('-t', '--test=<path>', "Command to run a programs or directory of programs") do |path|
+      command.push(:test)
+      params[:path] = path
+
+      abort "Error: path '#{path}' doesn't exist" if ! Dir.exists?(path) && ! File.exists?(path)
+    end
+
+    opts.on('-n', '--name=<name>', "Name of the test run") do |name|
+      params[:name] = name
+    end
+
     opts.on_tail(Lib::Util.help_footer)
   end
 
