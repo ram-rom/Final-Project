@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
 
+# Generate Files
+simplescalar
+
 # Vim Files
 *.swp
 *.swo
