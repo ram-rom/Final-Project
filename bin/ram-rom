@@ -1,64 +1,16 @@
 #!/usr/bin/env ruby
 
 require 'pry'
-require 'optparse'
 
 def load_environment
   lib_dir = "#{File.expand_path(File.dirname(__FILE__))}/../lib"
   Dir["#{lib_dir}/*.rb"].each { |file| require file }
 end
 
-def parse_arguments(argv)
-  command = []
-  params  = {}
-
-  argv << '-h' if argv.empty?
-
-  parser = OptionParser.new do |opts|
-    opts.banner = "Usage: ram-rom [command] [options]"
-
-    opts.on_head(Lib::Util.help_header)
-
-    opts.on('-i', '--install', "Command to install simple scalar") do
-      command.push(:install)
-    end
-
-    opts.on('-c', '--compile', "Command to compile simple scaler") do
-      command.push(:compile)
-    end
-
-    opts.on('-s', '--simple-test', "Command to run a simple test") do
-      command.push(:test)
-    end
-
-    opts.on('-t', '--test=<path>', "Command to run a programs or directory of programs") do |path|
-      command.push(:test)
-      params[:path] = path
-
-      abort "Error: path '#{path}' doesn't exist" if ! Dir.exists?(path) && ! File.exists?(path)
-    end
-
-    opts.on('-n', '--name=<name>', "Name of the test run") do |name|
-      params[:name] = name
-    end
-
-    opts.on_tail(Lib::Util.help_footer)
-  end
-
-  parser.parse!(argv)
-
-  abort "Error: You can only run one command at time" unless command.length == 1
-
-  {
-    command: command.first,
-    params: params
-  }
-end
-
 def main(argv)
   load_environment
 
-  opts    = parse_arguments(argv)
+  opts    = Lib::CmdArgs.parse(argv)
   command = opts[:command]
   params  = opts[:params] || {}
 
