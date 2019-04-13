@@ -7,7 +7,7 @@ module Lib
     def run
       error "simplescalar directory exists, remove it first to install fresh" if Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
-      info "*** Installation Started ***"
+      info "Installation Started"
 
       cmd('mkdir', @@SIMPLE_SCALAR_DIR)
       untar_files
@@ -16,7 +16,7 @@ module Lib
       cmd('make', '-C', @@SIMPLE_SIM_DIR)
       configure('gcc-2.6.3')
 
-      info "*** Installation Finished ***"
+      info "Installation Finished"
     end
 
     private

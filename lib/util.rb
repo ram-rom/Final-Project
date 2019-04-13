@@ -25,9 +25,14 @@ module Lib
       abort "Error: #{msg}"
     end
 
-    def cmd(*parts)
+    def cmd(*parts, display: true)
       cmd_str = parts.join(" ")
-      output  = %x{#{cmd_str} 2>&1}
+
+      output = if display
+        system("#{cmd_str} 2>&1")
+      else
+        %x{#{cmd_str} 2>&1}
+      end
       raise CommandExecutionError.new(cmd_str, output, $?.exitstatus) unless $?.exitstatus == 0
       output
     end
