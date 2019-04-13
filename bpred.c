@@ -534,6 +534,14 @@ void bpred_after_priming(struct bpred_t * bpred)
     ((((ADDR) >> 19) ^ ((ADDR) >> MD_BR_SHIFT)) & ((PRED)->config.bimod.size - 1))
 /* was: ((baddr >> 16) ^ baddr) & (pred->dirpred.bimod.size-1) */
 
+struct perc_p {
+    int t;
+    int y;
+    int size;
+    int *perc;
+    int *history;
+};
+
 /* predicts a branch direction */
     char *                                          /* pointer to counter */
 bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
@@ -585,8 +593,17 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
                 a = *history;b = *perceptron;
                 y += a * b;
             }
-
-
+            /* Need to pass to update
+             * 1. t -> 1 if out >= 0 or -1 otherwise
+             * 2. perceptron -> table of weights 
+             * 3. y -> used for deciding training 
+             * 4. Number of weights in perceptron */
+            perc_p *p_temp;
+            p_temp->t = y >= 0 ? 1 : -1;
+            p_temp->size = pred_dir->config.perc.wsize;
+            p_temp->history = &pred_dir->config.perc.shiftregs;
+            p_temp->perceptron = &pred_dir->config.perc.ptable[hash];
+            p = (char *) p_temp;
             break;
         case BPred2bit:
             p = &pred_dir->config.bimod.table[BIMOD_HASH(pred_dir, baddr)];
@@ -970,6 +987,21 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
     /* update state (but not for jumps) */
     if (dir_update_ptr->pdir1)
     {
+        if (pred->class == BPredPerc) {
+            perc_p *p = (perc_p) dir_update_ptr->pdir1;
+            int y = p->y; int t = p->t; int size = p->size;
+            int  *history = p->history;
+            int *perceptron = p->perceptron;
+            /* Do training if necessary */
+            if (!sign(y, t) || abs(y) <= THETA) {
+                for (int i = 0; i < size; i++, history++, perceptron++) {
+                    int a = *perceptron; int b = *history;
+                    *perceptron = a + t * b;
+                }
+            }
+            /* Update shift register */
+            /* TODO: Figure out how to do this */
+        }
         if (taken)
         {
             if (*dir_update_ptr->pdir1 < 3)
