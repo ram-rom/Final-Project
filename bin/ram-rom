@@ -10,17 +10,40 @@ end
 
 def parse_arguments(argv)
   options = {}
-  parser = OptionParser.new do |opts|
-    opts.banner = "Usage: ram-rom [options]"
 
-    opts.on('-i', '--install', "Install SimpleScalar") do
+  argv << '-h' if argv.empty?
+  parser = OptionParser.new do |opts|
+    opts.banner = "Usage: ram-rom [command] [options]"
+
+    opts.on_head(<<-HEAD
+
+SYNOPSIS
+HEAD
+    )
+    opts.on('-i', '--install', "Command to install simpleScalar") do
       options[:command] = :install
     end
 
-    opts.on('-i', '--compile', "Compile SimpleScaler") do
+    opts.on('-c', '--compile', "Command to compile simpleScaler") do
       opts[:command] = :compile
     end
-  end.parse!(argv)
+
+    opts.on_tail(<<-TAIL
+
+DESCRIPTION
+  These are the options you can pass to ram-rom. You can only run one command at a time. Some commands have extra options.
+
+  COMMANDS
+  --install
+    This should only need to be done once or if you want a fresh install.
+
+  --compile
+    Run this each time you want to compile simple scalar with your changes.
+TAIL
+    )
+  end
+
+  parser.parse!(argv)
 
   options
 end
