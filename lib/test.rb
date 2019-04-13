@@ -7,19 +7,21 @@ module Lib
 
     @@TEST_DIR = "#{ENV['USER']}_test_runs"
 
-    def run(path: nil, name: nil)
+    def run(path: nil, name: nil, predictor: nil)
       error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
       if path.nil?
         run_simple_test
       else
-        run_tests(path, name)
+        run_tests(path, name, predictor)
       end
     end
 
     private
 
-    def run_tests(path, name)
+    def run_tests(path, name, predictor)
+      raise ArgumentError.new("Required arguments not present: path, name, and predictor") if !path || !name || !predictor
+
       tests        = get_tests_from_path(path)
       test_run_dir = "#{@@TEST_DIR}/#{name}"
 
@@ -33,7 +35,7 @@ module Lib
         begin
           program_name = File.basename(test)
           info "  #{index + 1} Running '#{program_name}'..."
-          cmd(@@SIM_OUT_ORDER, test, '>', "#{test_run_dir}/#{program_name}.run", display: false)
+          cmd(@@SIM_OUT_ORDER, '-bpred', predictor, test, '>', output_file, display: false)
         rescue CommandExecutionError => e
           File.open("#{test_run_dir}/errors.txt", 'a') { |file| file.write( "#{e}\n" ) }
         end

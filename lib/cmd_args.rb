@@ -2,6 +2,7 @@ require 'optparse'
 
 module Lib
   module CmdArgs
+    @@PREDICTORS = ['nottaken', 'taken', 'bimod']
 
     def self.parse(argv)
       command = []
@@ -12,7 +13,7 @@ module Lib
       parser = OptionParser.new do |opts|
         opts.banner = "Usage: ram-rom [command] [options]"
 
-        opts.on_head(Lib::Util.help_header)
+        opts.on_head(help_header)
 
         opts.on('-i', '--install', "Command to install simple scalar") do
           command.push(:install)
@@ -37,7 +38,13 @@ module Lib
           params[:name] = name
         end
 
-        opts.on_tail(Lib::Util.help_footer)
+        opts.on('-p', '--predictor=<type>', "Name of the branch predictor") do |predictor|
+          params[:predictor] = predictor || @@PREDICTORS.first
+
+          abort "Error: predictor is not supported, should be one of: <#{@@PREDICTORS.join(', ')}>" unless @@PREDICTORS.include?(predictor)
+        end
+
+        opts.on_tail(help_footer)
       end
 
       parser.parse!(argv)
@@ -81,7 +88,11 @@ DESCRIPTION
   --name
     Name the current test run. Use this param with --test. This will create a directory under
     #{ENV['USER']}_test_runs. Each program run will be prefaced with the program name along with
-    #runtime parameters.
+    #runtime parameters. dfkjdkf
+
+  --predictor
+    The predictor to be used during the test run. Use this param with --test. The default is
+    #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
 
 TAIL
     end

@@ -36,42 +36,6 @@ module Lib
       raise CommandExecutionError.new(cmd_str, output, $?.exitstatus) unless $?.exitstatus == 0
       output
     end
-
-    def self.help_header
-      "\nSYNOPSIS"
-    end
-
-    def self.help_footer
-<<-TAIL
-
-DESCRIPTION
-  These are the options you can pass to ram-rom. You can only run one command at a time.
-  Some commands have extra options.
-
-  COMMANDS
-  --install
-    This should only need to be done once or if you want a fresh install.
-
-  --compile
-    Run this each time you want to compile simple scalar with your changes.
-
-  --simple-test
-    Run this after you compile. This will run the benchmark test-math. This is used as a
-    good sanity check that your code runs. Note this will output the statistics to stdout.
-
-  --test <path>
-    <path> can be a directory or a particular test. If <path> is a directory it will run
-    each program in that directory under simplescalar. If <path> is file it will only run
-    that program.
-
-  PARAMS
-  --name
-    Name the current test run. Use this param with --test. This will create a directory under
-    #{ENV['USER']}_test_runs. Each program run will be prefaced with the program name along with
-    #runtime parameters.
-
-TAIL
-    end
   end
 end
 
