@@ -5,7 +5,7 @@ module Lib
     include Util
 
     def run
-      error "Simple Scalar Dir Exists, remove it first to install fresh" if Dir.exists?(@@SIMPLE_SCALAR_DIR)
+      error "simplescalar directory exists, remove it first to install fresh" if Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
       info "*** Installation Started ***"
 

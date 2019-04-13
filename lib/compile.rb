@@ -5,7 +5,7 @@ module Lib
     include Util
 
     def run
-      error "Simple Scalar Dir Doesn't Exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
+      error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
       info "*** Compiling Started ***"
 
