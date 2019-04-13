@@ -7,7 +7,7 @@ module Lib
     def run
       error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
-      info "Compiling Started
+      info "Compiling Started"
 
       cmd('rm', '-f', "#{@@SIMPLE_SIM_DIR}/*.o")
 
