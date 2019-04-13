@@ -2,19 +2,41 @@
 
 require 'pry'
 require 'optparse'
-require_relative '../lib/install'
-require_relative '../lib/compile'
 
-def main(argv)
-  OptionParser.new do |opts|
+def load_environment
+  lib_dir = "#{File.expand_path(File.dirname(__FILE__))}/../lib"
+  Dir["#{lib_dir}/*.rb"].each { |file| require file }
+end
+
+def parse_arguments(argv)
+  options = {}
+  parser = OptionParser.new do |opts|
     opts.banner = "Usage: ram-rom [options]"
+
     opts.on('-i', '--install', "Install SimpleScalar") do
-      Lib::Installer.new.run
+      options[:command] = :install
     end
+
     opts.on('-i', '--compile', "Compile SimpleScaler") do
-      Lib::Compiler.new.run
+      opts[:command] = :compile
     end
   end.parse!(argv)
+
+  options
+end
+
+def main(argv)
+  load_environment
+
+  opts    = parse_arguments(argv)
+  command = opts[:command]
+
+  case command
+  when :install
+      Lib::Installer.new.run
+  when :compile
+      Lib::Compiler.new.run
+  end
 end
 
 main(ARGV)  if $0 == __FILE__
