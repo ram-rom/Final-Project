@@ -4,6 +4,9 @@ module Lib
   class Compiler
     include Util
 
+    @@SRC_DIR   = "#{@@ROOT_DIR}/src"
+    @@SRC_FILES = ['bpred.h', 'bpred.c', 'sim-outorder.c']
+
     def run
       error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 

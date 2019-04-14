@@ -10,9 +10,6 @@ module Lib
     @@TAR_DIR           = "#{@@ROOT_DIR}/tar_files"
     @@SIMPLE_SCALAR_DIR = "#{@@ROOT_DIR}/simplescalar"
     @@SIMPLE_SIM_DIR    = "#{@@SIMPLE_SCALAR_DIR}/simplesim-3.0"
-    @@SRC_DIR           = "#{@@ROOT_DIR}/src"
-
-    @@SRC_FILES         = ['bpred.c', 'bpred.h']
 
     @@SIM_OUT_ORDER     = "#{@@SIMPLE_SIM_DIR}/sim-outorder"
     @@DEFAULT_TEST      = "#{@@SIMPLE_SIM_DIR}/tests-alpha/bin/test-math"
