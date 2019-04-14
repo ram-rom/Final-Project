@@ -148,9 +148,10 @@ struct bpred_dir_t
         {
             int psize;              /* Number of perceptrons */
             int wsize;              /* Number of weights */
+            int theta;              /* Upper bound, 1.93 * wsize + 14 */
             int shift_width;        /* Size of history in shift regs */
             int *shiftregs;         /* History Table */
-            int *ptable;            /* Perecptron Table */
+            int **ptable;            /* Perecptron Table */
         } perc;
     } config;
 };
@@ -276,6 +277,11 @@ void bpred_recover(struct bpred_t *pred,   /* branch predictor instance */
         md_addr_t baddr,        /* branch address */
         int stack_recover_idx); /* Non-speculative top-of-stack;
                                  * used on mispredict recovery */
+
+/* Given two integer values, returns true if both numbers have the same sign
+ * and returns false otherwise. */
+bool_t cmp_sign(int a, /* First value */
+              int b);  /* Second value */
 
 /* update the branch predictor, only useful for stateful predictors; updates
    entry for instruction type OP at address BADDR.  BTB only gets updated
