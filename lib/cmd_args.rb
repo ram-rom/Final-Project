@@ -85,12 +85,12 @@ DESCRIPTION
     that program.
 
   OPTIONS
-  --name
+  --name <string>
     Name the current test run. Use this param with --test. This will create a directory under
     #{ENV['USER']}_test_runs. Each program run will be prefaced with the program name along with
     #runtime parameters. dfkjdkf
 
-  --predictor
+  --predictor <string>
     The predictor to be used during the test run. Use this param with --test. The default is
     #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
 
