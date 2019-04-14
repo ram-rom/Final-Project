@@ -34,8 +34,16 @@ module Lib
           abort "Error: path '#{path}' doesn't exist" if ! Dir.exists?(path) && ! File.exists?(path)
         end
 
+        opts.on('-a', '--analyze', "Command to collect statistics test runs") do
+          command.push(:analyze)
+        end
+
         opts.on('-n', '--name=<name>', "Name of the test run") do |name|
           params[:name] = name
+        end
+
+        opts.on('-o', '--out=<file>', "Name of output file for analyze") do |filename|
+          params[:filename] = filename
         end
 
         opts.on('-p', '--predictor=<type>', "Name of the branch predictor") do |predictor|
@@ -95,9 +103,11 @@ DESCRIPTION
     #runtime parameters. dfkjdkf
 
   --predictor <string>
-    The predictor to be used during the test run. Use this param with --test. The default is
-    #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
+    The predictor to be used during the test run. Use this param with --test or --simple-test.
+    The default is #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
 
+  --out <filename>
+    The name of the file to output for statistics from test runs. Use this parameter with analyze.
 TAIL
     end
   end

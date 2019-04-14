@@ -21,6 +21,8 @@ def main(argv)
       Lib::Compiler.new.run
   when :test
       Lib::Test.new.run(params)
+  when :analyze
+      Lib::Analyze.new.run(params)
   end
 end
 
