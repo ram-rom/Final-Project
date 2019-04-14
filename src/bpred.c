@@ -250,7 +250,7 @@ bpred_dir_create(
                     fatal("weight size, '%d', must be non-zero", l2size);
                 pred_dir->config.perc.wsize = l2size;
 
-                if (!shift_width || shift_width > 0)
+                if (!shift_width || shift_width <= 0)
                     fatal("ghr size, '%d', must be non-zero", shift_width);
                 pred_dir->config.perc.shift_width = shift_width;
                 pred_dir->config.perc.theta = ceil(shift_width * 1.93 + 14.0);

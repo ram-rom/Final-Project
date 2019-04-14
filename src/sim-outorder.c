@@ -902,9 +902,11 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
     }
   else if (!mystricmp(pred_type, "perceptron"))
     {
-      fatal("*** PERCEPTRON NOT IMPLEMENTED YET\n");
-      // INSTANTIATE CLASS HERE John
-      //pred = bpred_create(BPredPerc, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      unsigned int l1size      = 1;
+      unsigned int l2size      = 1024;
+      unsigned int shift_width = 8;
+
+      pred = bpred_create(BPredPerc, 0, l1size, l2size, 0, shift_width, 0, 0, 0, 0);
     }
   else if (!mystricmp(pred_type, "gshare"))
     {
