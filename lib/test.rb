@@ -7,7 +7,7 @@ module Lib
 
     @@TEST_DIR = "#{ENV['USER']}_test_runs"
 
-    def run(path: nil, name: nil, predictor: nil)
+    def run(path: nil, name: nil, predictor: 'taken')
       error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
       if path.nil?
@@ -20,9 +20,9 @@ module Lib
     private
 
     def run_tests(path, name, predictor)
-      raise ArgumentError.new("Required arguments not present: path, name, and predictor") if !path || !name || !predictor
+      raise ArgumentError.new("Required arguments not present: path: '#{path}', name: '#{name}', and predictor: '#{predictor}'") if !path || !name || !predictor
 
-      test_run_dir = "#{@@TEST_DIR}/#{name}"
+      test_run_dir = "#{@@TEST_DIR}/#{predictor}/#{name}"
       error_file   = "#{test_run_dir}/errors.txt"
 
       error "#{name} already exists in #{@@TEST_DIR}. Delete these manually or rename your test run!" if Dir.exists?(test_run_dir)
