@@ -22,10 +22,12 @@ module Lib
       abort "Error: #{msg}"
     end
 
-    def cmd(*parts, display: true)
+    def cmd(*parts, display_output: true, display_cmd: false)
       cmd_str = parts.join(" ")
 
-      output = if display
+      info("\n\n*** Running: #{cmd_str} ***\n\n") if display_cmd
+
+      output = if display_output
         system("#{cmd_str} 2>&1")
       else
         %x{#{cmd_str} 2>&1}

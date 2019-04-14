@@ -37,7 +37,7 @@ module Lib
           program_name = File.basename(test)
           info "  #{index + 1} Running '#{program_name}'..."
           output_file = "#{test_run_dir}/#{program_name}.run", predictor
-          cmd(@@SIM_OUT_ORDER, '-bpred', predictor, test, '>', output_file, display: false)
+          cmd(@@SIM_OUT_ORDER, '-bpred', predictor, test, '>', output_file, display_output: false)
         rescue CommandExecutionError => e
           failed += 1
           File.open(error_file, 'a') { |file| file.write( "#{e}\n" ) }
@@ -55,7 +55,7 @@ module Lib
 
     def run_simple_test(predictor)
       info "Started Simple Math Test "
-      cmd(@@SIM_OUT_ORDER, '-bpred', predictor, @@DEFAULT_TEST)
+      cmd(@@SIM_OUT_ORDER, '-bpred', predictor, @@DEFAULT_TEST, display_cmd: true)
       info "Completed"
     end
   end
