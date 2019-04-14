@@ -9,6 +9,7 @@ simplescalar
 *.swp
 *.swo
 *.swn
+*.swm
 
 # Object files
 *.o

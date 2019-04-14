@@ -42,8 +42,8 @@ module Lib
           params[:name] = name
         end
 
-        opts.on('-o', '--out=<file>', "Name of output file for analyze") do |filename|
-          params[:filename] = filename
+        opts.on('-d', '--directory=<directory>', "Name of output directory to place results") do |directory|
+          params[:directory] = directory
         end
 
         opts.on('-p', '--predictor=<type>', "Name of the branch predictor") do |predictor|
@@ -106,8 +106,8 @@ DESCRIPTION
     The predictor to be used during the test run. Use this param with --test or --simple-test.
     The default is #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
 
-  --out <filename>
-    The name of the file to output for statistics from test runs. Use this parameter with analyze.
+  --directory <string>
+    The name of the directory to output for statistics from test runs. Use this parameter with analyze.
 TAIL
     end
   end

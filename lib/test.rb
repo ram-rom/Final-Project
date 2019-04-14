@@ -5,8 +5,6 @@ module Lib
     include Util
     include Errors
 
-    @@TEST_DIR = "#{ENV['USER']}_test_runs"
-
     def run(path: nil, name: nil, predictor: 'taken')
       error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 

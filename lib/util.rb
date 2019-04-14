@@ -8,6 +8,7 @@ module Lib
     @@ROOT_DIR          = %x{git rev-parse --show-toplevel}.chomp
 
     @@TAR_DIR           = "#{@@ROOT_DIR}/tar_files"
+    @@TEST_DIR          = "#{ENV['USER']}_test_runs"
     @@SIMPLE_SCALAR_DIR = "#{@@ROOT_DIR}/simplescalar"
     @@SIMPLE_SIM_DIR    = "#{@@SIMPLE_SCALAR_DIR}/simplesim-3.0"
 
