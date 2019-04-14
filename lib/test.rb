@@ -11,7 +11,7 @@ module Lib
       error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
       if path.nil?
-        run_simple_test
+        run_simple_test(predictor)
       else
         run_tests(path, name, predictor)
       end
@@ -53,9 +53,9 @@ module Lib
       tests.map { |t| "#{@@ROOT_DIR}/#{t}" }
     end
 
-    def run_simple_test
+    def run_simple_test(predictor)
       info "Started Simple Math Test "
-      cmd(@@SIM_OUT_ORDER, @@DEFAULT_TEST)
+      cmd(@@SIM_OUT_ORDER, '-bpred', predictor, @@DEFAULT_TEST)
       info "Completed"
     end
   end

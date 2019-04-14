@@ -2,7 +2,7 @@ require 'optparse'
 
 module Lib
   module CmdArgs
-    @@PREDICTORS = ['nottaken', 'taken', 'bimod']
+    @@PREDICTORS = ['nottaken', 'taken', 'bimod', 'perceptron', 'gshare', 'random']
 
     def self.parse(argv)
       command = []
@@ -39,9 +39,7 @@ module Lib
         end
 
         opts.on('-p', '--predictor=<type>', "Name of the branch predictor") do |predictor|
-          params[:predictor] = predictor || @@PREDICTORS.first
-
-          abort "Error: predictor is not supported, should be one of: <#{@@PREDICTORS.join(', ')}>" unless @@PREDICTORS.include?(predictor)
+          params[:predictor] = extract_predictor(predictor)
         end
 
         opts.on_tail(help_footer)
@@ -55,6 +53,12 @@ module Lib
         command: command.first,
         params: params
       }
+    end
+
+    def self.extract_predictor(predictor)
+      predictor ||= @@PREDICTORS.first
+      abort "Error: predictor is not supported, should be one of: <#{@@PREDICTORS.join(', ')}>" unless @@PREDICTORS.include?(predictor)
+      predictor
     end
 
     def self.help_header
