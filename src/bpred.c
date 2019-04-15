@@ -264,13 +264,15 @@ bpred_dir_create(
                 pred_dir->config.perc.ptable = calloc(l1size, sizeof(long *));
                 if (!pred_dir->config.perc.ptable)
                     fatal("cannot allocate perceptron table");
-                for (int i = 0; i < l1size; i++) {
+                int i = 0;
+                for (i = 0; i < l1size; i++) {
                     pred_dir->config.perc.ptable[i] = calloc(l2size, sizeof(long));
                 }
 
                 /* Initialize Perceptron table */
-                for (int p = 0; p < l1size; cnt++) {
-                    for (int w = 0; w < l2size; w++) {
+                int p, w;
+                for (p = 0; p < l1size; cnt++) {
+                    for (w = 0; w < l2size; w++) {
                         pred_dir->config.perc.ptable[p][w] = 0;
                     }
                 }
@@ -591,7 +593,8 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
             int hash = ((((baddr) >> 19) ^ ((baddr) >> MD_BR_SHIFT)) & (pred_dir->config.perc.psize - 1));
             int *perceptron = &pred_dir->config.perc.ptable[hash];
             int *history = &pred_dir->config.perc.shiftregs;
-            for (int i = 0; i < pred_dir->config.perc.wsize; i++,history++,perceptron++) {
+            int i = 0;
+            for (i = 0; i < pred_dir->config.perc.wsize; i++,history++,perceptron++) {
                 int a = *history; int b = *perceptron;
                 y += a * b;
             }
@@ -1004,7 +1007,8 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
             int *perceptron = pred->dirpred.bimod->config.perc.ptable[hash];
             /* Do training if necessary */
             if (!cmp_sign(y, t) || abs(y) <= pred->dirpred.bimod->config.perc.theta) {
-                for (int i = 0; i < size; i++, history++, perceptron++) {
+                int i = 0;
+                for (i = 0; i < size; i++, history++, perceptron++) {
                     int a = *perceptron; int b = *history;
                     *perceptron = a + t * b;
                 }
