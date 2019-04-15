@@ -116,6 +116,7 @@ bpred_create(enum bpred_class class,     /* type of predictor to create */
 
         case BPredTaken:
         case BPredNotTaken:
+        case BPredRandom:
             /* no other state */
             break;
 
@@ -173,7 +174,8 @@ bpred_create(enum bpred_class class,     /* type of predictor to create */
             }
         case BPredTaken:
         case BPredNotTaken:
-            /* no other state */
+        case BPredRandom:       
+     /* no other state */
             break;
 
         default:
@@ -298,6 +300,7 @@ bpred_dir_create(
 
         case BPredTaken:
         case BPredNotTaken:
+        case BPredRandom:
             /* no other state */
             break;
 
@@ -340,6 +343,10 @@ void bpred_dir_config(
         case BPredNotTaken:
             fprintf(stream, "pred_dir: %s: predict not taken\n", name);
             break;
+
+        case BPredRandom:
+   	     fprintf(stream , "pred_dir: %s: Predict Randomly taken or not taken\n" , name);
+       	     break; 
 
         default:
             panic("bogus branch direction predictor class");
@@ -385,6 +392,26 @@ void bpred_config(struct bpred_t * pred, /* branch predictor instance */
             bpred_dir_config(pred->dirpred.bimod, "nottaken", stream);
             break;
 
+         case BPredRandom:
+	   //unsigned int n=10 ;
+            int c;
+            int random;
+            //int c;
+    		for(c=1;c<=10;c++)
+      	        {
+      			 random = rand()&1;
+                	  
+
+			if( random == 0)
+				bpred_dir_config (pred->dirpred.bimod, "taken", stream);
+
+			else 
+				bpred_dir_config (pred->dirpred.bimod, "nottaken", stream);
+		}
+
+        	break;
+
+
         default:
             panic("bogus branch predictor class");
     }
@@ -427,6 +454,11 @@ void bpred_reg_stats(struct bpred_t * pred,   /* branch predictor instance */
         case BPredNotTaken:
             name = "bpred_nottaken";
             break;
+
+        case BPredRandom:
+    	     name = "bpred_Random";
+             break;         
+
         default:
             panic("bogus branch predictor class");
     }
@@ -612,6 +644,11 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
         case BPred2bit:
             p = &pred_dir->config.bimod.table[BIMOD_HASH(pred_dir, baddr)];
             break;
+
+        case BPredRandom:
+              p = random;
+             break;
+
         case BPredTaken:
         case BPredNotTaken:
             break;
@@ -708,6 +745,24 @@ bpred_lookup(struct bpred_t * pred,                 /* branch predictor instance
             {
                 return btarget;
             }
+
+     case BPredRandom:
+         if(random == 0)
+    return btarget;
+	else 
+ 	{
+	 if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
+        {
+          return baddr + sizeof(md_inst_t);
+        }
+     	 else
+        {
+          return btarget;
+        }
+
+	}
+	break;
+
         default:
             panic("bogus predictor class");
     }
