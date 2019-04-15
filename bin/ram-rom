@@ -19,7 +19,7 @@ def main(argv)
       Lib::Installer.new.run
   when :compile
       Lib::Compiler.new.run
-  when :test
+  when :test, :plan
       Lib::Test.new.run(params)
   when :analyze
       Lib::Analyze.new.run(params)

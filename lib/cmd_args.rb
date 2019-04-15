@@ -27,23 +27,19 @@ module Lib
           command.push(:test)
         end
 
-        opts.on('-t', '--test=<path>', "Command to run a programs or directory of programs") do |path|
+        opts.on('-p', '--plan=<filename>', "Command to run benchmarks based on a planfile") do |planfile|
           command.push(:test)
-          params[:path] = path
+          params[:planfile] = planfile
 
-          abort "Error: path '#{path}' doesn't exist" if ! Dir.exists?(path) && ! File.exists?(path)
+          abort "Error: plan'#{planfile}' doesn't exist" if ! Dir.exists?(planfile) && ! File.exists?(planfile)
         end
 
         opts.on('-a', '--analyze', "Command to collect statistics test runs") do
           command.push(:analyze)
         end
 
-        opts.on('-n', '--name=<name>', "Name of the test run") do |name|
-          params[:name] = name
-        end
-
-        opts.on('-d', '--directory=<directory>', "Name of output directory to place results") do |directory|
-          params[:directory] = directory
+        opts.on('-d', '--title=<title>', "Name of the title of the plan execution") do |title|
+          params[:title] = title
         end
 
         opts.on('-p', '--predictor=<type>', "Name of the branch predictor") do |predictor|
@@ -91,23 +87,16 @@ DESCRIPTION
     Run this after you compile. This will run the benchmark test-math. This is used as a
     good sanity check that your code runs. Note this will output the statistics to stdout.
 
-  --test <path>
-    <path> can be a directory or a particular test. If <path> is a directory it will run
-    each program in that directory under simplescalar. If <path> is file it will only run
-    that program.
+  --plan <planfile>
+    Execute the plans given by the planfile.
 
   OPTIONS
-  --name <string>
-    Name the current test run. Use this param with --test. This will create a directory under
-    #{ENV['USER']}_test_runs. Each program run will be prefaced with the program name along with
-    #runtime parameters. dfkjdkf
-
   --predictor <string>
-    The predictor to be used during the test run. Use this param with --test or --simple-test.
+    The predictor to be used during the test run. Use this param with --simple-test.
     The default is #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
 
-  --directory <string>
-    The name of the directory to output for statistics from test runs. Use this parameter with analyze.
+  --title <string>
+    The title of the plan to run analysis on. Use this aparm with --analyze
 TAIL
     end
   end

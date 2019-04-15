@@ -5,18 +5,19 @@ module Lib
   class Analyze
     include Util
 
-    def run(directory: nil)
-      error "Output file required, please use --directory argument" if directory.nil?
-      error "Analysis file already exists: #{directory}" if File.exists?(directory)
+    def run(title: nil)
+      inpath  = "#{@@ROOT_DIR}/#{title}"
+      outpath = "#{@@ROOT_DIR}/analysis/#{title}"
 
-      path = "#{@@ROOT_DIR}/#{directory}"
-      cmd('mkdir', '-p', path)
+      error "Analysis file already exists: #{outpath}" if File.exists?(outpath)
 
-      stats     = gather_statistics
+      cmd('mkdir', '-p', outpath)
+
+      stats     = gather_statistics(inpath)
       avg_stats = get_average(stats)
 
-      generate_predictor_csv(path, avg_stats)
-      generate_cumulative_csvs(path, avg_stats)
+      generate_predictor_csv(outpath, avg_stats)
+      generate_cumulative_csvs(outpath, avg_stats)
     end
 
     private
@@ -90,9 +91,10 @@ module Lib
       avg
     end
 
-    def gather_statistics
+    def gather_statistics(inpath)
       statistics = {}
-      predictor_dirs = Dir["#{@@TEST_DIR}/*"]
+
+      predictor_dirs = Dir["#{inpath}/*"]
       predictor_dirs.each do |pred_dir|
         predictor             = File.basename(pred_dir)
         statistics[predictor] = gather_predictor_stats(pred_dir)

@@ -5,50 +5,67 @@ module Lib
     include Util
     include Errors
 
-    def run(path: nil, name: nil, predictor: 'taken')
+    def run(planfile: nil, predictor: 'taken')
       error "simplescalar directory doesn't exist, you need to run install first" unless Dir.exists?(@@SIMPLE_SCALAR_DIR)
 
-      if path.nil?
+      if planfile.nil?
         run_simple_test(predictor)
       else
-        run_tests(path, name, predictor)
+        run_plans(planfile)
       end
     end
 
     private
 
-    def run_tests(path, name, predictor)
-      raise ArgumentError.new("Required arguments not present: path: '#{path}', name: '#{name}', and predictor: '#{predictor}'") if !path || !name || !predictor
+    def run_plans(planfile)
+      planfile = YAML.load_file(planfile)
+      plans    = planfile[:plans]
 
-      test_run_dir = "#{@@TEST_DIR}/#{predictor}/#{name}"
-      error_file   = "#{test_run_dir}/errors.txt"
+      plans.each do |plan|
+        execute_plan(plan)
+      end
+    end
 
-      error "#{name} already exists in #{@@TEST_DIR}. Delete these manually or rename your test run!" if Dir.exists?(test_run_dir)
+    def execute_plan(plan)
+      title          = plan[:title]
+      predictors     = plan[:predictors]
+      num_executions = plan[:num_executions]
+      benchmarks     = plan[:benchmarks]
 
-      cmd('mkdir', '-p', test_run_dir)
+      error "you already executed this plan: #{title} - remove it or call it something else" if Dir.exists?(title)
 
-      tests  = get_tests_from_path(path)
-      failed = 0
-      info "Running #{tests.count} tests for #{name}"
-      tests.each_with_index do |test, index|
+      predictors.each do |predictor|
+        info "Running #{predictor} benchmarks"
+        num_executions.times do |i|
+          info "  Iteration #{i}"
+          execute_benchmarks(predictor, benchmarks, title, i)
+        end
+      end
+    end
+
+    def execute_benchmarks(predictor, benchmarks, title, iteration)
+      failed    = 0
+      total     = benchmarks.length
+      rundir    = "#{title}/#{predictor}/#{iteration}"
+      errorfile = "#{rundir}/error.txt"
+
+      cmd('mkdir', '-p', rundir)
+      benchmarks.each do |benchmark|
         begin
-          program_name = File.basename(test)
-          info "  #{index + 1} Running '#{program_name}'..."
-          output_file = "#{test_run_dir}/#{program_name}.run", predictor
-          cmd(@@SIM_OUT_ORDER, '-bpred', predictor, test, '>', output_file, display_output: false)
+          name    = benchmark[:name]
+          args    = benchmark[:args]
+          bname   = File.basename(name)
+          outpath = "#{rundir}/#{bname}.run"
+
+          info "    benchmark #{bname}"
+          cmd(@@SIM_OUT_ORDER, '-bpred', predictor, name, args, '>', outpath, display_output: false)
         rescue CommandExecutionError => e
           failed += 1
-          File.open(error_file, 'a') { |file| file.write( "#{e}\n" ) }
+          File.open(errorfile, 'a') { |file| file.write( "#{e}\n" ) }
         end
       end
 
-      info "Completed - Failed: #{failed}, Successful: #{tests.count - failed}, Total: #{tests.count}"
-      info "See #{error_file} for details" if failed > 0
-    end
-
-    def get_tests_from_path(path)
-      tests = File.file?(path) ? [path] : Dir["#{path}/*"].select{ |f| File.file?(f) }
-      tests.map { |t| "#{@@ROOT_DIR}/#{t}" }
+      info "Run Complete. failed: #{failed}, successful: #{total - failed}, total: #{total}, errors: #{errorfile}"
     end
 
     def run_simple_test(predictor)

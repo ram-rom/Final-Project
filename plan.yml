@@ -1,0 +1,21 @@
+:plans:
+  - :title: 'execution_1'
+    :predictors: ['taken', 'nottaken']
+    :num_executions: 10
+    :benchmarks:
+      - :name: simplescalar/simplesim-3.0/tests/bin/anagram
+        :args: ''
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-args
+        :args: ''
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-dirent
+        :args: ''
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-fmath
+        :args: ''
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-llong
+        :args: ''
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-lswlr
+        :args: ''
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-math
+        :args: ''
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-printf
+        :args: ''
