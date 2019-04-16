@@ -23,8 +23,9 @@ module Lib
           command.push(:compile)
         end
 
-        opts.on('-s', '--simple-test', "Command to run a simple test") do
+        opts.on('-s', '--simple-test=<predictor>', "Command to run a simple test") do |predictor|
           command.push(:test)
+          params[:predictor] = extract_predictor(predictor)
         end
 
         opts.on('-p', '--plan=<filename>', "Command to run benchmarks based on a planfile") do |planfile|
@@ -37,10 +38,6 @@ module Lib
         opts.on('-a', '--analyze=title', "Command to collect statistics for plan run named <title>") do |title|
           command.push(:analyze)
           params[:title] = title
-        end
-
-        opts.on('-p', '--predictor=<type>', "Name of the branch predictor") do |predictor|
-          params[:predictor] = extract_predictor(predictor)
         end
 
         opts.on_tail(help_footer)
@@ -69,8 +66,7 @@ module Lib
     def self.help_footer
 <<-TAIL
 
-DESCRIPTION
-  These are the options you can pass to ram-rom. You can only run one command at a time.
+DESCRIPTION These are the options you can pass to ram-rom. You can only run one command at a time.
   Some commands have extra options.
 
   COMMANDS
@@ -80,20 +76,16 @@ DESCRIPTION
   --compile
     Run this each time you want to compile simple scalar with your changes.
 
-  --simple-test
+  --simple-test <predictor>
     Run this after you compile. This will run the benchmark test-math. This is used as a
     good sanity check that your code runs. Note this will output the statistics to stdout.
+    Pass the predictor you want run the simple test on.
 
   --plan <planfile>
     Execute the plans given by the planfile.
 
   --analyze <title>
     Run analytics on execution run named <title>. This will create various csv files.
-
-  OPTIONS
-  --predictor <string>
-    The predictor to be used during the test run. Use this param with --simple-test.
-    The default is #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
 TAIL
     end
   end
