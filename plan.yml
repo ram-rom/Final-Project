@@ -10,7 +10,7 @@
       - :name: benchmarks/compress95.alpha
         :args: '< benchmarks/compress95.in'
       - :name: benchmarks/go.alpha
-        :args: 50 9 benchmarks2/stone9.in
+        :args: 50 9 benchmarks/2stone9.in
       - :name: benchmarks/perl.alpha
         :args: ''
       - :name: simplescalar/simplesim-3.0/tests/bin/anagram
