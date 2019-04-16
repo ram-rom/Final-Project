@@ -37,7 +37,7 @@ module Lib
       predictors.each do |predictor|
         info "Running #{predictor} benchmarks"
         num_executions.times do |i|
-          info "  Iteration #{i}"
+          info "  Iteration #{i + 1}"
           execute_benchmarks(predictor, benchmarks, title, i + 1)
         end
       end
