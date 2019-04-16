@@ -1,10 +1,20 @@
 :plans:
-  - :title: 'execution_1'
+  - :title: 'spec_run'
     :predictors: ['taken', 'nottaken']
-    :num_executions: 5
+    :num_executions: 10
     :benchmarks:
+      - :name: benchmarks/anagram.alpha
+        :args: 'benchmarks/words < benchmarks/anagram.in'
+      - :name: benchmarks/cc1.alpha
+        :args: '-O benchmarks/1stmt.i'
+      - :name: benchmarks/compress95.alpha
+        :args: '< benchmarks/compress95.in'
+      - :name: benchmarks/go.alpha
+        :args: 50 9 benchmarks2/stone9.in
+      - :name: benchmarks/perl.alpha
+        :args: ''
       - :name: simplescalar/simplesim-3.0/tests/bin/anagram
-        :args: "simplescalar/simplesim-3.0/tests/inputs/words < simplescalar/simplesim-3.0/tests/inputs/input.txt"
+        :args: 'simplescalar/simplesim-3.0/tests/inputs/words < simplescalar/simplesim-3.0/tests/inputs/input.txt'
       - :name: simplescalar/simplesim-3.0/tests/bin/test-args
         :args: ''
       - :name: simplescalar/simplesim-3.0/tests/bin/test-dirent
