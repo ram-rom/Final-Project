@@ -34,11 +34,8 @@ module Lib
           abort "Error: plan'#{planfile}' doesn't exist" if ! Dir.exists?(planfile) && ! File.exists?(planfile)
         end
 
-        opts.on('-a', '--analyze', "Command to collect statistics test runs") do
+        opts.on('-a', '--analyze=title', "Command to collect statistics for plan run named <title>") do |title|
           command.push(:analyze)
-        end
-
-        opts.on('-d', '--title=<title>', "Name of the title of the plan execution") do |title|
           params[:title] = title
         end
 
@@ -90,13 +87,13 @@ DESCRIPTION
   --plan <planfile>
     Execute the plans given by the planfile.
 
+  --analyze <title>
+    Run analytics on execution run named <title>. This will create various csv files.
+
   OPTIONS
   --predictor <string>
     The predictor to be used during the test run. Use this param with --simple-test.
     The default is #{@@PREDICTORS.first}. Possible values: <#{@@PREDICTORS.join(', ')}>
-
-  --title <string>
-    The title of the plan to run analysis on. Use this aparm with --analyze
 TAIL
     end
   end
