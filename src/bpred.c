@@ -392,25 +392,9 @@ void bpred_config(struct bpred_t * pred, /* branch predictor instance */
             bpred_dir_config(pred->dirpred.bimod, "nottaken", stream);
             break;
 
-         case BPredRandom:
-	   //unsigned int n=10 ;
-            int c;
-            int random;
-            //int c;
-    		for(c=1;c<=10;c++)
-      	        {
-      			 random = rand()&1;
-                	  
-
-			if( random == 0)
-				bpred_dir_config (pred->dirpred.bimod, "taken", stream);
-
-			else 
-				bpred_dir_config (pred->dirpred.bimod, "nottaken", stream);
-		}
-
+         case BPredRandom:            
+          	bpred_dir_config (pred->dirpred.bimod, "random", stream);	               		
         	break;
-
 
         default:
             panic("bogus branch predictor class");
@@ -456,7 +440,7 @@ void bpred_reg_stats(struct bpred_t * pred,   /* branch predictor instance */
             break;
 
         case BPredRandom:
-    	     name = "bpred_Random";
+    	     name = "bpred_random";
              break;         
 
         default:
@@ -646,9 +630,13 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
             break;
 
         case BPredRandom:
-              p = random;
-             break;
+       // {
+         // int dfg;
+           //  for(dfg=0;dfg<10;dfg++)
+            //  p = (char *) rand()%2;
 
+             break;
+          // }
         case BPredTaken:
         case BPredNotTaken:
             break;
@@ -746,23 +734,25 @@ bpred_lookup(struct bpred_t * pred,                 /* branch predictor instance
                 return btarget;
             }
 
-     case BPredRandom:
-         if(random == 0)
-    return btarget;
-	else 
- 	{
-	 if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
-        {
-          return baddr + sizeof(md_inst_t);
-        }
-     	 else
-        {
-          return btarget;
-        }
+     case BPredRandom:{
 
-	}
-	break;
+    	 unsigned int  p =  rand()%2;
+        	 if( p  == 0)
+      		     return btarget;
+		else 
+ 		{
+		     if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
+       		     {
+         		 return baddr + sizeof(md_inst_t);
+       		     }
+     	             else
+       		     {
+         		 return btarget;
+       	             }
 
+		}
+		break;
+         }
         default:
             panic("bogus predictor class");
     }
@@ -946,7 +936,7 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
     }
 
     /* Can exit now if this is a stateless predictor */
-    if (pred->class == BPredNotTaken || pred->class == BPredTaken)
+    if (pred->class == BPredNotTaken || pred->class == BPredTaken|| pred->class == BPredRandom )
         return;
 
     /*
