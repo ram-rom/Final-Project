@@ -1,7 +1,7 @@
 :plans:
   - :title: 'spec_run'
     :predictors: ['taken', 'nottaken', 'bimod', '2lev', 'random', 'perceptron']
-    :num_executions: 2
+    :num_executions: 10
     :benchmarks:
       - :name: benchmarks/anagram.alpha
         :args: 'benchmarks/words < benchmarks/anagram.in'
