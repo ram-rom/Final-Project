@@ -113,6 +113,7 @@ enum bpred_class
     BPred2bit,     /* 2-bit saturating cntr pred (dir mapped) */
     BPredTaken,    /* static predict taken */
     BPredNotTaken, /* static predict not taken */
+    BPredRandom,    /* randomly predict whether branch taken or not */
     BPred_NUM
 };
 

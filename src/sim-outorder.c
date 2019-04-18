@@ -916,9 +916,9 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
     }
   else if (!mystricmp(pred_type, "random"))
     {
-      fatal("*** RANDOM NOT IMPLEMENTED YET\n");
+     // fatal("*** RANDOM NOT IMPLEMENTED YET\n");
       // INSTANTIATE CLASS HERE Kushi
-      //pred = bpred_create(BPredRandom, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      pred = bpred_create(BPredRandom, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
   else if (!mystricmp(pred_type, "taken"))
     {
