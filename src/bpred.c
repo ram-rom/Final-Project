@@ -104,6 +104,11 @@ bpred_create(enum bpred_class class,     /* type of predictor to create */
 
             break;
 
+        case BPredGShare:
+            pred->dirpred.twolev = 
+                bpred_dir_create(class, l1size, l2size, shift_width, xor);
+            break;
+
         case BPredPerc:
             pred->dirpred.bimod =
                 bpred_dir_create(BPredPerc, l1size, l2size, shift_width, 0);
@@ -129,6 +134,7 @@ bpred_create(enum bpred_class class,     /* type of predictor to create */
     {
         case BPredComb:
         case BPred2Level:
+        case BPredGShare:
         case BPredPerc:
         case BPred2bit:
             {
@@ -206,6 +212,7 @@ bpred_dir_create(
     cnt = -1;
     switch (class)
     {
+        case BPredGShare:
         case BPred2Level:
             {
                 if (!l1size || (l1size & (l1size - 1)) != 0)
@@ -248,12 +255,8 @@ bpred_dir_create(
                     fatal("perceptron table size, '%d', must be non-zero", l1size);
                 pred_dir->config.perc.psize = l1size;
 
-                if (!l2size)
-                    fatal("weight size, '%d', must be non-zero", l2size);
-                pred_dir->config.perc.wsize = l2size;
-
-                if (!shift_width || shift_width > 30)
-                    fatal("ghr size, '%d', must be between 0 and 30", shift_width);
+                if (!shift_width || shift_width > 64)
+                    fatal("ghr size, '%d', must be between 0 and 64", shift_width);
                 pred_dir->config.perc.shift_width = shift_width;
                 pred_dir->config.perc.theta = ceil(shift_width * 1.93 + 14.0);
 
@@ -268,13 +271,13 @@ bpred_dir_create(
                     fatal("cannot allocate perceptron table");
                 int i = 0;
                 for (i = 0; i < l1size; i++) {
-                    pred_dir->config.perc.ptable[i] = calloc(l2size, sizeof(long));
+                    pred_dir->config.perc.ptable[i] = calloc(shift_width, sizeof(long));
                 }
 
                 /* Initialize Perceptron table */
                 int p, w;
                 for (p = 0; p < l1size; p++) {
-                    for (w = 0; w < l2size; w++) {
+                    for (w = 0; w < shift_width; w++) {
                         pred_dir->config.perc.ptable[p][w] = 0;
                     }
                 }
@@ -319,6 +322,7 @@ void bpred_dir_config(
 {
     switch (pred_dir->class)
     {
+        case BPredGShare:
         case BPred2Level:
             fprintf(stream,
                     "pred_dir: %s: 2-lvl: %d l1-sz, %d bits/ent, %s xor, %d l2-sz, direct-mapped\n",
@@ -363,6 +367,13 @@ void bpred_config(struct bpred_t * pred, /* branch predictor instance */
             bpred_dir_config(pred->dirpred.bimod, "bimod", stream);
             bpred_dir_config(pred->dirpred.twolev, "2lev", stream);
             bpred_dir_config(pred->dirpred.meta, "meta", stream);
+            fprintf(stream, "btb: %d sets x %d associativity",
+                    pred->btb.sets, pred->btb.assoc);
+            fprintf(stream, "ret_stack: %d entries", pred->retstack.size);
+            break;
+
+        case BPredGShare:
+            bpred_dir_config(pred->dirpred.twolev, "gshare", stream);
             fprintf(stream, "btb: %d sets x %d associativity",
                     pred->btb.sets, pred->btb.assoc);
             fprintf(stream, "ret_stack: %d entries", pred->retstack.size);
@@ -428,6 +439,9 @@ void bpred_reg_stats(struct bpred_t * pred,   /* branch predictor instance */
             break;
         case BPred2bit:
             name = "bpred_bimod";
+            break;
+        case BPredGShare:
+            name = "bpred_gshare";
             break;
         case BPredPerc:
             name = "bpred_bimod";
@@ -707,6 +721,7 @@ bpred_lookup(struct bpred_t * pred,                 /* branch predictor instance
                 }
             }
             break;
+        case BPredGShare:
         case BPred2Level:
             if ((MD_OP_FLAGS(op) & (F_CTRL | F_UNCOND)) != (F_CTRL | F_UNCOND))
             {
@@ -734,25 +749,25 @@ bpred_lookup(struct bpred_t * pred,                 /* branch predictor instance
                 return btarget;
             }
 
-     case BPredRandom:{
+         case BPredRandom:
+        {
+             unsigned int p = rand() % 2;
+             if( p == 0)
+                 return btarget;
+            else 
+            {
+                 if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
+                 {
+                     return baddr + sizeof(md_inst_t);
+                 }
+                 else
+                 {
+                     return btarget;
+                 }
 
-    	 unsigned int  p =  rand()%2;
-        	 if( p  == 0)
-      		     return btarget;
-		else 
- 		{
-		     if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
-       		     {
-         		 return baddr + sizeof(md_inst_t);
-       		     }
-     	             else
-       		     {
-         		 return btarget;
-       	             }
-
-		}
-		break;
-         }
+            }
+            break;
+        }
         default:
             panic("bogus predictor class");
     }
@@ -936,7 +951,7 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
     }
 
     /* Can exit now if this is a stateless predictor */
-    if (pred->class == BPredNotTaken || pred->class == BPredTaken|| pred->class == BPredRandom )
+    if (pred->class == BPredNotTaken || pred->class == BPredTaken || pred->class == BPredRandom )
         return;
 
     /*

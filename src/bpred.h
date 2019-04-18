@@ -109,6 +109,7 @@ enum bpred_class
 {
     BPredComb,     /* combined predictor (McFarling) */
     BPred2Level,   /* 2-level correlating pred w/2-bit counters */
+    BPredGShare,   /* 2-bit PHT Gshare */
     BPredPerc,     /* dynamic perceptron */
     BPred2bit,     /* 2-bit saturating cntr pred (dir mapped) */
     BPredTaken,    /* static predict taken */
