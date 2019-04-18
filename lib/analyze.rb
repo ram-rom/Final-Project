@@ -5,19 +5,26 @@ module Lib
   class Analyze
     include Util
 
-    def run(title: nil)
-      inpath  = "#{@@ROOT_DIR}/#{title}"
-      outpath = "#{@@ROOT_DIR}/analysis/#{title}"
+    def run
+      plans = Dir["#{@@ROOT_DIR}/plans/*"]
+      plans.each do |plan|
+        title   = File.basename(plan)
+        inpath  = "#{@@ROOT_DIR}/plans/#{title}"
+        outpath = "#{@@ROOT_DIR}/analysis/#{title}"
 
-      error "Analysis file already exists: #{outpath}" if File.exists?(outpath)
+        if File.exists?(outpath)
+          info "Skipping analysis on plan named '#{title}' it already exists at '#{outpath}'"
+          next
+        end
 
-      cmd('mkdir', '-p', outpath)
+        cmd('mkdir', '-p', outpath)
 
-      stats     = gather_statistics(inpath)
-      avg_stats = get_average(stats)
+        stats     = gather_statistics(inpath)
+        avg_stats = get_average(stats)
 
-      generate_predictor_csv(outpath, avg_stats)
-      generate_cumulative_csvs(outpath, avg_stats)
+        generate_predictor_csv(outpath, avg_stats)
+        generate_cumulative_csvs(outpath, avg_stats)
+      end
     end
 
     private

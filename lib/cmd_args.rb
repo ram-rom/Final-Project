@@ -35,9 +35,8 @@ module Lib
           abort "Error: plan'#{planfile}' doesn't exist" if ! Dir.exists?(planfile) && ! File.exists?(planfile)
         end
 
-        opts.on('-a', '--analyze=title', "Command to collect statistics for plan run named <title>") do |title|
+        opts.on('-a', '--analyze', "Command to collect statistics from plan runs") do |title|
           command.push(:analyze)
-          params[:title] = title
         end
 
         opts.on_tail(help_footer)
@@ -84,8 +83,8 @@ DESCRIPTION These are the options you can pass to ram-rom. You can only run one 
   --plan <planfile>
     Execute the plans given by the planfile.
 
-  --analyze <title>
-    Run analytics on execution run named <title>. This will create various csv files.
+  --analyze
+    Run analytics on everything in the analysis directory. This will create various csv files.
 TAIL
     end
   end

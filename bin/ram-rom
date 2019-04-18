@@ -22,7 +22,7 @@ def main(argv)
   when :test, :plan
       Lib::Test.new.run(params)
   when :analyze
-      Lib::Analyze.new.run(params)
+      Lib::Analyze.new.run
   end
 end
 
