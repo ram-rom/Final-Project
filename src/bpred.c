@@ -271,7 +271,7 @@ bpred_dir_create(
 
                 /* Initialize Perceptron table */
                 int p, w;
-                for (p = 0; p < l1size; cnt++) {
+                for (p = 0; p < l1size; p++) {
                     for (w = 0; w < l2size; w++) {
                         pred_dir->config.perc.ptable[p][w] = 0;
                     }
@@ -602,7 +602,7 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
              * 1. t -> 1 if out >= 0 or -1 otherwise
              * 2. y -> used for deciding training 
              * 3. hash -> hash to get exact perceptron */
-            struct perc_p *p_temp;
+            struct perc_p *p_temp = malloc(sizeof(struct perc_p));
             p_temp->y = y;
             p_temp->t = y >= 0 ? 1 : -1;
             p_temp->hash = hash;
