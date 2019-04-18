@@ -46,7 +46,7 @@ module Lib
     def execute_benchmarks(predictor, benchmarks, title, iteration)
       failed    = 0
       total     = benchmarks.length
-      rundir    = "#{title}/#{predictor}/#{iteration}"
+      rundir    = "#{@@ROOT_DIR}/plans/#{title}/#{predictor}/#{iteration}"
       errorfile = "#{rundir}/error.txt"
 
       cmd('mkdir', '-p', rundir)

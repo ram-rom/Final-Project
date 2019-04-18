@@ -11,8 +11,6 @@
         :args: '< benchmarks/compress95.in'
       - :name: benchmarks/go.alpha
         :args: 50 9 benchmarks/2stone9.in
-      - :name: benchmarks/perl.alpha
-        :args: ''
       - :name: simplescalar/simplesim-3.0/tests/bin/anagram
         :args: 'simplescalar/simplesim-3.0/tests/inputs/words < simplescalar/simplesim-3.0/tests/inputs/input.txt'
       - :name: simplescalar/simplesim-3.0/tests/bin/test-args
