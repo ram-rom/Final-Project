@@ -452,11 +452,9 @@ void bpred_reg_stats(struct bpred_t * pred,   /* branch predictor instance */
         case BPredNotTaken:
             name = "bpred_nottaken";
             break;
-
         case BPredRandom:
     	     name = "bpred_random";
              break;         
-
         default:
             panic("bogus branch predictor class");
     }
@@ -586,6 +584,7 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
     /* Except for jumps, get a pointer to direction-prediction bits */
     switch (pred_dir->class)
     {
+        case BPredGShare:
         case BPred2Level:
             {
                 int l1index, l2index;

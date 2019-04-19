@@ -909,9 +909,12 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
     }
   else if (!mystricmp(pred_type, "gshare"))
     {
-      fatal("*** GSHARE NOT IMPLEMENTED YET\n");
-      // INSTANTIATE CLASS HERE John
-      //pred = bpred_create(BPredGshare, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      unsigned int l1size      = 1;
+      unsigned int shift_width = 8;
+      unsigned int l2size      = pow(2, shift_width);
+      unsigned int xor = 1;
+
+      pred = bpred_create(BPredGShare, 0, l1size, l2size, 0, shift_width, xor, 512, 4, 0);
     }
   else if (!mystricmp(pred_type, "random"))
     {
