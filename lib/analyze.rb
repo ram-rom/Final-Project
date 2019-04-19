@@ -134,12 +134,17 @@ module Lib
     def collect_stats_from_benchmark(run_file)
       total  = 0;
       misses = 0;
+      current_line = nil
       File.open(run_file, 'r') do |file|
         file.each_line do |line|
-          if mline = line.match(/bpred_\w+.lookups\s+(\d+) # total.*/)
-            total = mline.captures.first.to_i
-          elsif mline = line.match(/bpred_\w+.misses\s+(\d+) # total.*/)
-            misses = mline.captures.first.to_i
+          begin
+            current_line = line
+            if mline = line.match(/bpred_\w+.lookups\s+(\d+) # total.*/)
+              total = mline.captures.first.to_i
+            elsif mline = line.match(/bpred_\w+.misses\s+(\d+) # total.*/)
+              misses = mline.captures.first.to_i
+            end
+          rescue ArgumentError => e
           end
         end
       end
