@@ -225,7 +225,7 @@ bpred_dir_create(
                             l2size);
                 pred_dir->config.two.l2size = l2size;
 
-                if (!shift_width || shift_width > 64)
+                if (!shift_width || shift_width > 31)
                     fatal("shift register width, `%d', must be non-zero and positive",
                             shift_width);
                 pred_dir->config.two.shift_width = shift_width;
@@ -255,7 +255,7 @@ bpred_dir_create(
                     fatal("perceptron table size, '%d', must be non-zero", l1size);
                 pred_dir->config.perc.psize = l1size;
 
-                if (!shift_width || shift_width > 64)
+                if (!shift_width || shift_width > 31)
                     fatal("ghr size, '%d', must be between 0 and 64", shift_width);
                 pred_dir->config.perc.shift_width = shift_width;
                 pred_dir->config.perc.wsize = shift_width;
