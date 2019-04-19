@@ -258,6 +258,7 @@ bpred_dir_create(
                 if (!shift_width || shift_width > 64)
                     fatal("ghr size, '%d', must be between 0 and 64", shift_width);
                 pred_dir->config.perc.shift_width = shift_width;
+                pred_dir->config.perc.wsize = shift_width;
                 pred_dir->config.perc.theta = ceil(shift_width * 1.93 + 14.0);
 
                 /* History Reg */
@@ -266,12 +267,12 @@ bpred_dir_create(
                     fatal("cannot allocate history table");
 
                 /* Perceptron Table */
-                pred_dir->config.perc.ptable = calloc(l1size, sizeof(long *));
+                pred_dir->config.perc.ptable = calloc(l1size, sizeof(int *));
                 if (!pred_dir->config.perc.ptable)
                     fatal("cannot allocate perceptron table");
                 int i = 0;
                 for (i = 0; i < l1size; i++) {
-                    pred_dir->config.perc.ptable[i] = calloc(shift_width, sizeof(long));
+                    pred_dir->config.perc.ptable[i] = calloc(shift_width, sizeof(int));
                 }
 
                 /* Initialize Perceptron table */
@@ -620,11 +621,13 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
         {
             int y = 0;
             int hash = ((((baddr) >> 19) ^ ((baddr) >> MD_BR_SHIFT)) & (pred_dir->config.perc.psize - 1));
-            int *perceptron = &pred_dir->config.perc.ptable[hash];
-            int *history = &pred_dir->config.perc.shiftregs;
+
+            int *perceptron = pred_dir->config.perc.ptable[hash];
+            int *history = pred_dir->config.perc.shiftregs;
             int i = 0;
             for (i = 0; i < pred_dir->config.perc.wsize; i++,history++,perceptron++) {
-                int a = *history; int b = *perceptron;
+                int a = *history;
+                int b = *perceptron;
                 y += a * b;
             }
             /* Need to pass to update
@@ -1060,7 +1063,9 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
     {
         if (pred->class == BPredPerc) {
             struct perc_p *p = (struct perc_p*) dir_update_ptr->pdir1;
-            int y = p->y; int t = p->t; int hash = p->hash; 
+            int y = p->y;
+            int t = p->t;
+            int hash = p->hash;
             int size = pred->dirpred.bimod->config.perc.wsize;
             int *history = pred->dirpred.bimod->config.perc.shiftregs;
             int *perceptron = pred->dirpred.bimod->config.perc.ptable[hash];
@@ -1068,7 +1073,9 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
             if (!cmp_sign(y, t) || abs(y) <= pred->dirpred.bimod->config.perc.theta) {
                 int i = 0;
                 for (i = 0; i < size; i++, history++, perceptron++) {
-                    int a = *perceptron; int b = *history;
+                    int a = *perceptron;
+                    int b = *history > 0 ? 1 : -1;
+
                     *perceptron = a + t * b;
                 }
             }
