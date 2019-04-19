@@ -226,7 +226,7 @@ bpred_dir_create(
                 pred_dir->config.two.l2size = l2size;
 
                 if (!shift_width || shift_width > 31)
-                    fatal("shift register width, `%d', must be non-zero and positive",
+                    fatal("shift register width, `%d', must be non-zero, positive and less than 32",
                             shift_width);
                 pred_dir->config.two.shift_width = shift_width;
 
@@ -256,7 +256,7 @@ bpred_dir_create(
                 pred_dir->config.perc.psize = l1size;
 
                 if (!shift_width || shift_width > 31)
-                    fatal("ghr size, '%d', must be between 0 and 64", shift_width);
+                    fatal("ghr size, '%d', must be between 0 and 31 inclusive", shift_width);
                 pred_dir->config.perc.shift_width = shift_width;
                 pred_dir->config.perc.wsize = shift_width;
                 pred_dir->config.perc.theta = ceil(shift_width * 1.93 + 14.0);
