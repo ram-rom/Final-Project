@@ -1,5 +1,5 @@
 require_relative 'util'
-
+require 'yaml'
 module Lib
   class Test
     include Util
