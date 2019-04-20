@@ -58,6 +58,11 @@
 #include "machine.h"
 #include "bpred.h"
 
+/* Used for bit manipulation in the GHR */
+void SetBit(int* a, int k){*a |= (1 << k);}
+void ClearBit(int* a, int k){*a &= ~(1 << k);}
+int TestBit(int* a, int k){return (*a & (1 << k));}
+
 /* turn this on to enable the SimpleScalar 2.0 RAS bug */
 /* #define RAS_BUG_COMPATIBLE */
 
@@ -262,9 +267,11 @@ bpred_dir_create(
                 pred_dir->config.perc.theta = ceil(shift_width * 1.93 + 14.0);
 
                 /* History Reg */
-                pred_dir->config.perc.shiftregs = calloc(shift_width, sizeof(int));
+                pred_dir->config.perc.shiftregs = calloc(1, sizeof(int));
                 if (!pred_dir->config.perc.shiftregs)
                     fatal("cannot allocate history table");
+                /* Bias Bit */
+                SetBit(pred_dir->config.perc.shiftregs, 0);
 
                 /* Perceptron Table */
                 pred_dir->config.perc.ptable = calloc(l1size, sizeof(int *));
@@ -277,11 +284,9 @@ bpred_dir_create(
 
                 /* Initialize Perceptron table */
                 int p, w;
-                for (p = 0; p < l1size; p++) {
-                    for (w = 0; w < shift_width; w++) {
+                for (p = 0; p < l1size; p++)
+                    for (w = 0; w < shift_width; w++)
                         pred_dir->config.perc.ptable[p][w] = 0;
-                    }
-                }
             }
 
         case BPred2bit:
@@ -625,9 +630,9 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
             int *perceptron = pred_dir->config.perc.ptable[hash];
             int *history = pred_dir->config.perc.shiftregs;
             int i = 0;
-            for (i = 0; i < pred_dir->config.perc.wsize; i++,history++,perceptron++) {
-                int a = *history;
-                int b = *perceptron;
+            for (i = 0; i < pred_dir->config.perc.wsize; i++) {
+                int a = TestBit(history, i) ? 1 : -1;
+                int b = perceptron[i];
                 y += a * b;
             }
             /* Need to pass to update
@@ -1066,22 +1071,22 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
             int y = p->y;
             int t = p->t;
             int hash = p->hash;
-            int size = pred->dirpred.bimod->config.perc.wsize;
+            int wsize = pred->dirpred.bimod->config.perc.wsize;
             int *history = pred->dirpred.bimod->config.perc.shiftregs;
             int *perceptron = pred->dirpred.bimod->config.perc.ptable[hash];
             /* Do training if necessary */
             if (!cmp_sign(y, t) || abs(y) <= pred->dirpred.bimod->config.perc.theta) {
                 int i = 0;
-                for (i = 0; i < size; i++, history++, perceptron++) {
-                    int a = *perceptron;
-                    int b = *history > 0 ? 1 : -1;
-
-                    *perceptron = a + t * b;
+                for (i = 0; i < wsize; i++) {
+                    int a = perceptron[i];
+                    int b = TestBit(history, i) ? 1 : -1;
+                    perceptron[i] = a + t * b;
                 }
             }
             /* Update shift register */
-            *pred->dirpred.bimod->config.perc.shiftregs <<= 1;
-            *pred->dirpred.bimod->config.perc.shiftregs |= taken;
+            *history >> 1;
+            SetBit( history, 0 );
+            t > 0 ? SetBit( history, 1 ) : ClearBit( history, 1 );
         }
         if (taken)
         {
