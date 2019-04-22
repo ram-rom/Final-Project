@@ -649,15 +649,7 @@ bpred_dir_lookup(struct bpred_dir_t * pred_dir, /* branch dir predictor inst */
         case BPred2bit:
             p = &pred_dir->config.bimod.table[BIMOD_HASH(pred_dir, baddr)];
             break;
-
         case BPredRandom:
-       // {
-         // int dfg;
-           //  for(dfg=0;dfg<10;dfg++)
-            //  p = (char *) rand()%2;
-
-             break;
-          // }
         case BPredTaken:
         case BPredNotTaken:
             break;
@@ -850,16 +842,30 @@ bpred_lookup(struct bpred_t * pred,                 /* branch predictor instance
     if (pbtb == NULL)
     {
         /* BTB miss -- just return a predicted direction */
-        return ((*(dir_update_ptr->pdir1) >= 2)
-                ? /* taken */ 1
-                : /* not taken */ 0);
+        if (pred->class == BPredPerc) {
+            struct perc_p *p = (struct perc_p*) dir_update_ptr->pdir1;
+            return ((p->y >= 0)
+                    ? /* taken */ 1 
+                    : /* not taken */ 0);
+        } else {
+            return ((*(dir_update_ptr->pdir1) >= 2)
+                    ? /* taken */ 1
+                    : /* not taken */ 0);
+        }
     }
     else
     {
         /* BTB hit, so return target if it's a predicted-taken branch */
-        return ((*(dir_update_ptr->pdir1) >= 2)
-                ? /* taken */ pbtb->target
-                : /* not taken */ 0);
+        if (pred->class == BPredPerc) {
+            struct perc_p *p = (struct perc_p*) dir_update_ptr->pdir1;
+            return ((p->y >= 0) 
+                    ? /* taken */ pbtb->target 
+                    : /* not taken */ 0);
+        } else {
+            return ((*(dir_update_ptr->pdir1) >= 2)
+                    ? /* taken */ pbtb->target
+                    : /* not taken */ 0);
+        }
     }
 }
 
@@ -1069,7 +1075,7 @@ void bpred_update(struct bpred_t * pred,                 /* branch predictor ins
         if (pred->class == BPredPerc) {
             struct perc_p *p = (struct perc_p*) dir_update_ptr->pdir1;
             int y = p->y;
-            int t = p->t;
+            int t = taken != 0 ? 1 : -1;
             int hash = p->hash;
             int wsize = pred->dirpred.bimod->config.perc.wsize;
             int *history = pred->dirpred.bimod->config.perc.shiftregs;

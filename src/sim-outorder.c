@@ -902,7 +902,7 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
     }
   else if (!mystricmp(pred_type, "perceptron"))
     {
-      unsigned int l1size      = 1024;
+      unsigned int l1size      = 128;
       unsigned int shift_width = 8;
 
       pred = bpred_create(BPredPerc, 0, l1size, 0, 0, shift_width, 0, 512, 4, 0);
