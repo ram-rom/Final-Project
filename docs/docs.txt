@@ -63,7 +63,7 @@ changing the global history register size, changing the perceptron table size, a
 the perceptron training threshold. To run this command you just need to type the following
 in a bash shell when in the projects root.
    ./bin/ram-rom --compile
-After running this comand you should run simple-test(below) as a sanity check to make sure
+After running this command you should run simple-test(below) as a sanity check to make sure
 that everything compiled correctly..
 
 iii) Simple-Test
