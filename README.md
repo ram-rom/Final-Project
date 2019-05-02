@@ -1,7 +1,7 @@
-User Guide - Ram Rom Final Project
+User Guide - Ram Rom Final Project (TEAM 2)
 
 This document will serve as the definitive guide for team Ram Rom's project.
-For those of you that have to review team Ram Rom's project this document will
+For those of you that have to review our team's (Team 2) project this document will
 provide you with all information needed to test and run our project. This
 documentation is broken down into the following sections.
 
@@ -9,16 +9,16 @@ documentation is broken down into the following sections.
 2. Ram Rom CLI
 3. Project Workflow
 4. Run File
-4. Expected Results and Analysis
+5. Expected Results and Analysis
 
 
 1. Introduction
 --------------------
 Branch prediction is one of several important pieces needed to execute what
 is known as dynamic execution. The purpose of branch prediction is to enable
-the improve the flow of instruction pipelining and to avoid idling in the CPU.
-Branch prediction methods can be split into two separate groups: 1)dynamic and
-2) static. Static branch prediction methods are methods are those prediction
+and improve the flow of instruction pipelining and to avoid idling in the CPU.
+Branch prediction methods can be split into two separate groups: dynamic and
+static. Static branch prediction methods are methods are those prediction
 schemes that do not rely on dynamic branch history and are typically implemented
 in compilers, while dynamic branch prediction methods are those that are typically
 implemented in hardware, and rely both on the current branch instruction as well
