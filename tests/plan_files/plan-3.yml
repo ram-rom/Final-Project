@@ -1,0 +1,29 @@
+:plans:
+  - :title: "spec_run_gshare_2"
+    :predictors: ["taken", "nottaken", "bimod", "2lev", "random", "perceptron"]
+    :num_executions: 2
+    :benchmarks:
+      - :name: benchmarks/anagram.alpha
+        :args: "benchmarks/words < benchmarks/anagram.in"
+      - :name: benchmarks/cc1.alpha
+        :args: "-O benchmarks/1stmt.i"
+      - :name: benchmarks/compress95.alpha
+        :args: "< benchmarks/compress95.in"
+      - :name: benchmarks/go.alpha
+        :args: 50 9 benchmarks/2stone9.in
+      - :name: simplescalar/simplesim-3.0/tests/bin/anagram
+        :args: "simplescalar/simplesim-3.0/tests/inputs/words < simplescalar/simplesim-3.0/tests/inputs/input.txt"
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-args
+        :args: ""
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-dirent
+        :args: "/"
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-fmath
+        :args: ""
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-llong
+        :args: ""
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-lswlr
+        :args: ""
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-math
+        :args: ""
+      - :name: simplescalar/simplesim-3.0/tests/bin/test-printf
+        :args: ""
