@@ -10,7 +10,8 @@ This document will serve as the definitive guide for running team Ram Rom's proj
 2. Ram Rom CLI
 3. Project Workflow
 4. Run File
-5. Expected Results and Analysis
+5. Step by Step Instructions
+6. Expected Results and Analysis
 
 
 # Introduction
@@ -111,7 +112,7 @@ in a bash shell when in the projects root.
 
 # Project Workflow
 
-Here is a detailed description on how the workflow for our project works.
+Here is a detailed description on how the workflow for our project works. These are the steps you will need to do if you want to run anything manually.
 ```
      Step 1: Run the Install command
      Step 2: Run the compile command
@@ -137,6 +138,13 @@ for your analysis. It includes the following configurations for you to sample:
    5. GShare     - Table size: 2^4 Global History size: 4
    6. GShare     - Table size: 2^8 Global History size: 8
 ```
+
+# Step by Step
+1. ssh into heracles
+2. clone the project: `git clone https://github.com/ram-rom/Final-Project.git`
+3. run the script:
+4. look at the results:
+5. etc
 
 # Expected Results and Analysis
 
