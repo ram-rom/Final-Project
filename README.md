@@ -1,9 +1,10 @@
 # Team 2 (Ram Rom) User Guide
 
-This document will serve as the definitive guide for team Ram Rom's project.
-For those of you that have to review our team's (Team 2) project this document will
-provide you with all information needed to test and run our project. This
-documentation is broken down into the following sections.
+# Scope
+
+Our final paper, research presentation, implementation presentation, references, calendar of work, and division of labor can be found here https://drive.google.com/drive/folders/1vNzWmhKQWIFzUsYWOIggq5pv5JwF8a1p?usp=sharing
+
+This document will serve as the definitive guide for running team Ram Rom's project. For a deeper conceptural explanation see the link above. For those of you that have to review our team's (Team 2) project this document will provide you with all information needed to test and run our project. This documentation is broken down into the following sections.
 
 1. Introduction
 2. Ram Rom CLI
