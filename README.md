@@ -1,4 +1,4 @@
-User Guide - Ram Rom Final Project (TEAM 2)
+# Team 2 (Ram Rom) User Guide
 
 This document will serve as the definitive guide for team Ram Rom's project.
 For those of you that have to review our team's (Team 2) project this document will
