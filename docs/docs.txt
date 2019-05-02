@@ -8,6 +8,7 @@ documentation is broken down into the following sections.
 1. Introduction
 2. Ram Rom CLI
 3. Project Workflow
+4. Run File
 4. Expected Results and Analysis
 
 
@@ -116,8 +117,18 @@ Here is a detailed description on how the workflow for our project works.
 
 These steps should be enough to fully evaluate our project. 
 
+4. Run File
+--------------------------
+We have included a run file in the root directory that you can use to generate some sample results
+for your analysis. It includes the following configurations for you to sample:
+   1. Perceptron - Table size: 128 Global History size: 2
+   2. Perceptron - Table size: 256 Global History size: 4
+   3. Perceptron - Table size: 512 Global History size: 8
+   4. GShare     - Table size: 2^2 Global History size: 2
+   5. GShare     - Table size: 2^4 Global History size: 4
+   6. GShare     - Table size: 2^8 Global History size: 8
 
-4. Expected Results and Analysis
+5. Expected Results and Analysis
 ------------------------------------
 After running the project workflow I am sure you are wondering what you are supposed to do now.
 The key thing to do is to look at the csvs that are produced by the analyze command and see

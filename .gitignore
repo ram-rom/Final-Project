@@ -63,3 +63,5 @@ dkms.conf
 analysis/
 tags
 plans/
+.vscode/
+tags/
