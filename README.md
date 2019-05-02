@@ -38,11 +38,13 @@ the indexed counter is incremented when a branch is taken and decremented otherw
 
 In building this project we implemented an easy-to-use command-line interface(CLI) that
 can be used by the groups testing our project. The tool has the following commands:
+```
     i) Install:                 Command to install Simple Scalar
     ii) Compile:                Command to compile Simple Scalar
     iii) Simple-Test:           Command to run a simple test
     iv) Plan:                   Command to run benchmarks based on a plan file
     v) Analyze:                 Command to collect statistics from plan runs
+```
 Here is a detailed description of each command and what it does.
 
 ## Install
