@@ -141,10 +141,11 @@ for your analysis. It includes the following configurations for you to sample:
 
 # Step by Step
 1. ssh into heracles
-2. clone the project: `git clone https://github.com/ram-rom/Final-Project.git`
-3. run the script:
-4. look at the results:
-5. etc
+2. gem install pry
+3. clone the project: `git clone https://github.com/ram-rom/Final-Project.git`
+4. run the script: <insert exact step to do this>
+5. look at the results: <give exact command to vim into file>
+6. <more commands if needed>
 
 # Expected Results and Analysis
 
