@@ -25,7 +25,7 @@ in compilers, while dynamic branch prediction methods are those that are typical
 implemented in hardware, and rely both on the current branch instruction as well
 as dynamic history execution. In our project we looked at implementing several
 dynamic branch prediction algorithms in a hardware simulator known as SimpleScalar.
-The algorithms we implemented are: 1) dynamic perceptrons and 2)gshare. Dynamic
+The algorithms we implemented are: dynamic perceptrons and gshare. Dynamic
 perceptrons uses a table of perceptrons (table of weights) to train and
 improve the speculative performance of the branch predictor. Weights are incremented
 when the branch was taken and decremented otherwise. The branch is taken when the
