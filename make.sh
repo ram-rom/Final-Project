@@ -72,4 +72,5 @@ fi
 ./bin/ram-rom --analyze
 
 #Reset sim link
+rm -rf $SCRIPT_DIR/simplescalar/simplesim-3.0/sim-outorder.c
 ln -s $SCRIPT_DIR/src/sim-outorder.c $SCRIPT_DIR/simplescalar/simplesim-3.0/sim-outorder.c
