@@ -12,8 +12,8 @@ documentation is broken down into the following sections.
 5. Expected Results and Analysis
 
 
-1. Introduction
---------------------
+# Introduction
+
 Branch prediction is one of several important pieces needed to execute what
 is known as dynamic execution. The purpose of branch prediction is to enable
 and improve the flow of instruction pipelining and to avoid idling in the CPU.
@@ -33,8 +33,8 @@ otherwise. Gshare on the other hand uses a table of 2-bit saturation counters an
 the indexed counter is incremented when a branch is taken and decremented otherwise.
 
 
-2. Ram Rom CLI
---------------------
+# Ram Rom CLI
+
 In building this project we implemented an easy-to-use command-line interface(CLI) that
 can be used by the groups testing our project. The tool has the following commands:
     i) Install:                 Command to install Simple Scalar
@@ -44,8 +44,8 @@ can be used by the groups testing our project. The tool has the following comman
     v) Analyze:                 Command to collect statistics from plan runs
 Here is a detailed description of each command and what it does.
 
-i) Install
-----------------------
+## Install
+
 The install command will allow you to install Simple Scalar. Before running any other
 commands in the CLI you must run this command. To run this command you just need to type
 the following in a bash shell when in the projects root.
@@ -56,8 +56,8 @@ packages. If this is the case you can this command from the same shell:
 After running this command go back and run the original install command. There is no need
 to run this command again after it runs successfully.
 
-ii) Compile
-----------------------
+## Compile
+
 The compile command will allow you to compile simple scalar once you make any changes to
 its source files. Examples to changes you will need to make to its source files include
 changing the global history register size, changing the perceptron table size, and changing
@@ -67,8 +67,8 @@ in a bash shell when in the projects root.
 After running this command you should run simple-test(below) as a sanity check to make sure
 that everything compiled correctly..
 
-iii) Simple-Test
------------------------
+## Simple-Test
+
 The simple-test command will allow you to run a simple test that checks whether Simple-Scalar
 is working correctly or not. This test should be run every time after you run the compile command.
 To run this command you just need to type the following in a bash shell when in the projects root.
@@ -78,8 +78,8 @@ and it will use that specific branch predictor in running its tests. For example
 perceptron in this command, you would run
    ./bin/ram-rom --simple-test perceptron
 
-iv) Plan
-----------------------
+## Plan
+
 The plan command will allow you to run the full suite of benchmarks. In order to run this command you
 must provide it a plan yaml file. We have provided a template file for those groups that are going to
 be testing our software. You should only need to change the plan name, number of executions and the predictors
@@ -92,8 +92,8 @@ After running the plan command you must run the below analyze command in order t
 into easy-to-read csv files. Be advised that if you want to run multiple plans you will need to change the plan
 name.
 
-v) Analyze
-----------------------
+## Analyze
+
 The analyze command should only be ran after you have ran the plan command. The analyze command will aggregate all
 data currently in the plan folder(it can handle multiple plans) and will aggregate the results into an analyze folder.
 This folder will have sub folders for each execution and nested sub folders for each predictor. The final sub folder
@@ -101,8 +101,8 @@ will contain csv files with the results of running plan. To run the analyze comm
 in a bash shell when in the projects root.
    ./bin/ram-rom --analyze
 
-3. Project Workflow
------------------------
+# Project Workflow
+
 Here is a detailed description on how the workflow for our project works.
 
      Step 1: Run the Install command
@@ -117,8 +117,8 @@ Here is a detailed description on how the workflow for our project works.
 
 These steps should be enough to fully evaluate our project. 
 
-4. Run File
---------------------------
+# Run File
+
 We have included a run file in the root directory that you can use to generate some sample results
 for your analysis. It includes the following configurations for you to sample:
    1. Perceptron - Table size: 128 Global History size: 2
@@ -128,8 +128,8 @@ for your analysis. It includes the following configurations for you to sample:
    5. GShare     - Table size: 2^4 Global History size: 4
    6. GShare     - Table size: 2^8 Global History size: 8
 
-5. Expected Results and Analysis
-------------------------------------
+# Expected Results and Analysis
+
 After running the project workflow I am sure you are wondering what you are supposed to do now.
 The key thing to do is to look at the csvs that are produced by the analyze command and see
 how the different predictors compare. You will notice that the csvs only contain information
