@@ -10,7 +10,7 @@ This document will serve as the definitive guide for running team Ram Rom's proj
 2. Ram Rom CLI
 3. Project Workflow
 4. Run File
-5. Step by Step Instructions
+5. Step by Step Instructions (go here if you want to just run premade tests)
 6. Expected Results and Analysis
 
 
