@@ -47,37 +47,39 @@ Here is a detailed description of each command and what it does.
 
 ## Install
 
-The install command will allow you to install Simple Scalar. Before running any other
-commands in the CLI you must run this command. To run this command you just need to type
-the following in a bash shell when in the projects root.
-    ./bin/ram-rom --install
-It is possible that you will encounter an error stating that you are missing several Ruby
-packages. If this is the case you can this command from the same shell:
-    gem install pry
-After running this command go back and run the original install command. There is no need
-to run this command again after it runs successfully.
+The install command will allow you to install Simple Scalar. Before running any other commands in the CLI you must run this command. To run this command you just need to type the following in a bash shell when in the projects root.
+
+```./bin/ram-rom --install```
+    
+It is possible that you will encounter an error stating that you are missing several Ruby packages. If this is the case you can this command from the same shell:
+
+```gem install pry```
+
+After running this command go back and run the original install command. There is no need to run this command again after it runs successfully.
 
 ## Compile
 
-The compile command will allow you to compile simple scalar once you make any changes to
-its source files. Examples to changes you will need to make to its source files include
-changing the global history register size, changing the perceptron table size, and changing
-the perceptron training threshold. To run this command you just need to type the following
+The compile command will allow you to compile simple scalar once you make any changes to its source files. Examples to changes you will need to make to its source files include changing the global history register size, changing the perceptron table size, and changing the perceptron training threshold. To run this command you just need to type the following
 in a bash shell when in the projects root.
-   ./bin/ram-rom --compile
+
+```./bin/ram-rom --compile```
+
 After running this command you should run simple-test(below) as a sanity check to make sure
-that everything compiled correctly..
+that everything compiled correctly.
 
 ## Simple-Test
 
 The simple-test command will allow you to run a simple test that checks whether Simple-Scalar
 is working correctly or not. This test should be run every time after you run the compile command.
 To run this command you just need to type the following in a bash shell when in the projects root.
-   ./bin/ram-rom --simple-test
+
+```./bin/ram-rom --simple-test```
+
 Optionally, you can add the name of a branch from <nottaken, taken, bimod, perceptron, gshare, random>
 and it will use that specific branch predictor in running its tests. For example, if you wanted to use
 perceptron in this command, you would run
-   ./bin/ram-rom --simple-test perceptron
+
+```./bin/ram-rom --simple-test perceptron```
 
 ## Plan
 
@@ -88,7 +90,9 @@ you would like to test. By default the plan file will run 10 executions of the f
 This will take a really long time to run and it is not advised that you run the default plan file unless
 you feel you must. To run this command you just need to type the following in a bash shell when in the projects
 root.
-   ./bin/ram-rom --plan plan.yml
+
+```./bin/ram-rom --plan plan.yml```
+
 After running the plan command you must run the below analyze command in order to accumulate all of the statistics
 into easy-to-read csv files. Be advised that if you want to run multiple plans you will need to change the plan
 name.
@@ -100,12 +104,13 @@ data currently in the plan folder(it can handle multiple plans) and will aggrega
 This folder will have sub folders for each execution and nested sub folders for each predictor. The final sub folder
 will contain csv files with the results of running plan. To run the analyze command you just need to type the following
 in a bash shell when in the projects root.
-   ./bin/ram-rom --analyze
+
+```./bin/ram-rom --analyze```
 
 # Project Workflow
 
 Here is a detailed description on how the workflow for our project works.
-
+```
      Step 1: Run the Install command
      Step 2: Run the compile command
      Step 3: Run the simple-test command
@@ -115,19 +120,21 @@ Here is a detailed description on how the workflow for our project works.
        - Remember to change the name of the plan after each run
      Step 6: Run the analyze command
      Step 7: Evaluate the results in the analyze folder. 
-
+```
 These steps should be enough to fully evaluate our project. 
 
 # Run File
 
 We have included a run file in the root directory that you can use to generate some sample results
 for your analysis. It includes the following configurations for you to sample:
+```
    1. Perceptron - Table size: 128 Global History size: 2
    2. Perceptron - Table size: 256 Global History size: 4
    3. Perceptron - Table size: 512 Global History size: 8
    4. GShare     - Table size: 2^2 Global History size: 2
    5. GShare     - Table size: 2^4 Global History size: 4
    6. GShare     - Table size: 2^8 Global History size: 8
+```
 
 # Expected Results and Analysis
 
