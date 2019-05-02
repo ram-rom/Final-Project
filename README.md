@@ -13,7 +13,6 @@ This document will serve as the definitive guide for running team Ram Rom's proj
 5. Step by Step Instructions (go here if you want to just run premade tests)
 6. Expected Results and Analysis
 
-
 # Introduction
 
 Branch prediction is one of several important pieces needed to execute what
@@ -34,11 +33,11 @@ dot product of the global history and the index perceptron is positive and not t
 otherwise. Gshare on the other hand uses a table of 2-bit saturation counters and
 the indexed counter is incremented when a branch is taken and decremented otherwise.
 
-
 # Ram Rom CLI
 
 In building this project we implemented an easy-to-use command-line interface(CLI) that
 can be used by the groups testing our project. The tool has the following commands:
+
 ```
     i) Install:                 Command to install Simple Scalar
     ii) Compile:                Command to compile Simple Scalar
@@ -46,17 +45,18 @@ can be used by the groups testing our project. The tool has the following comman
     iv) Plan:                   Command to run benchmarks based on a plan file
     v) Analyze:                 Command to collect statistics from plan runs
 ```
+
 Here is a detailed description of each command and what it does.
 
 ## Install
 
 The install command will allow you to install Simple Scalar. Before running any other commands in the CLI you must run this command. To run this command you just need to type the following in a bash shell when in the projects root.
 
-```./bin/ram-rom --install```
-    
+`./bin/ram-rom --install`
+
 It is possible that you will encounter an error stating that you are missing several Ruby packages. If this is the case you can this command from the same shell:
 
-```gem install pry```
+`gem install pry`
 
 After running this command go back and run the original install command. There is no need to run this command again after it runs successfully.
 
@@ -65,7 +65,7 @@ After running this command go back and run the original install command. There i
 The compile command will allow you to compile simple scalar once you make any changes to its source files. Examples to changes you will need to make to its source files include changing the global history register size, changing the perceptron table size, and changing the perceptron training threshold. To run this command you just need to type the following
 in a bash shell when in the projects root.
 
-```./bin/ram-rom --compile```
+`./bin/ram-rom --compile`
 
 After running this command you should run simple-test(below) as a sanity check to make sure
 that everything compiled correctly.
@@ -76,13 +76,13 @@ The simple-test command will allow you to run a simple test that checks whether 
 is working correctly or not. This test should be run every time after you run the compile command.
 To run this command you just need to type the following in a bash shell when in the projects root.
 
-```./bin/ram-rom --simple-test```
+`./bin/ram-rom --simple-test`
 
 Optionally, you can add the name of a branch from <nottaken, taken, bimod, perceptron, gshare, random>
 and it will use that specific branch predictor in running its tests. For example, if you wanted to use
 perceptron in this command, you would run
 
-```./bin/ram-rom --simple-test perceptron```
+`./bin/ram-rom --simple-test perceptron`
 
 ## Plan
 
@@ -94,7 +94,7 @@ This will take a really long time to run and it is not advised that you run the 
 you feel you must. To run this command you just need to type the following in a bash shell when in the projects
 root.
 
-```./bin/ram-rom --plan plan.yml```
+`./bin/ram-rom --plan plan.yml`
 
 After running the plan command you must run the below analyze command in order to accumulate all of the statistics
 into easy-to-read csv files. Be advised that if you want to run multiple plans you will need to change the plan
@@ -108,11 +108,12 @@ This folder will have sub folders for each execution and nested sub folders for 
 will contain csv files with the results of running plan. To run the analyze command you just need to type the following
 in a bash shell when in the projects root.
 
-```./bin/ram-rom --analyze```
+`./bin/ram-rom --analyze`
 
 # Project Workflow
 
 Here is a detailed description on how the workflow for our project works. These are the steps you will need to do if you want to run anything manually.
+
 ```
      Step 1: Run the Install command
      Step 2: Run the compile command
@@ -122,14 +123,16 @@ Here is a detailed description on how the workflow for our project works. These 
      Step 5: Run the plan command with your edited plan.yml file as many times as necessary
        - Remember to change the name of the plan after each run
      Step 6: Run the analyze command
-     Step 7: Evaluate the results in the analyze folder. 
+     Step 7: Evaluate the results in the analyze folder.
 ```
-These steps should be enough to fully evaluate our project. 
+
+These steps should be enough to fully evaluate our project.
 
 # Run File
 
 We have included a run file in the root directory that you can use to generate some sample results
 for your analysis. It includes the following configurations for you to sample:
+
 ```
    1. Perceptron - Table size: 128 Global History size: 2
    2. Perceptron - Table size: 256 Global History size: 4
@@ -140,13 +143,19 @@ for your analysis. It includes the following configurations for you to sample:
 ```
 
 # Step by Step
+
 If you'd like to just run the pre-made configurations we made then feel free to do the following. For more comprehensive testing refer to the documentation above
 
 1. ssh into heracles
 2. clone the project: `git clone https://github.com/ram-rom/Final-Project.git`
 3. `cd Final-Project`
 4. `./make.sh`
-5. look in the `analyze` folder for csv results
+5. decide whether to run the short version or long version of make.sh. The short version
+   will run the random, perceptron and gshare predictor through one iteration of our benchmarks
+   while the long version will run the random, perceptron and gshare predictor through one iteration
+   of the benchmarks for numerous table sizes and global history sizes. Warning: The long version will
+   take up to 8 hours to run while the short version will only take about 30 minutes.
+6. look in the `analyze` folder for csv results
 
 # Expected Results and Analysis
 
@@ -155,11 +164,11 @@ The key thing to do is to look at the csvs that are produced by the analyze comm
 how the different predictors compare. You will notice that the csvs only contain information
 about the miss rate. The reason we chose to only look at the miss rate can best be explained by
 looking at how the execution time of a program relates to the miss rate. We all know that
-        Execution Time = Instruction Count * Clock Rate * CPI
+Execution Time = Instruction Count _ Clock Rate _ CPI
 In our case we are running the same benchmarks with the same simulator architecture each run,
 and thus Instruction Count and Clock Rate are unchanged with each execution. Because of this
 We can confidently say that Execution Time is directly related to CPI. But looking at CPI we know
-       CPI = Ideal CPI + Miss Penalty * Miss Rate
+CPI = Ideal CPI + Miss Penalty \* Miss Rate
 Since we are using the same simulated architecture each run, we know that the Ideal CPI and
 Miss Penalty will be the same with each execution. But that means that CPI is directly
 related to miss rate, and by extension that Execution time is directly related to miss rate. That

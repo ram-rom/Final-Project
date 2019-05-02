@@ -1,7 +1,7 @@
 :plans:
   - :title: "spec_run_gshare_4"
-    :predictors: ["taken", "nottaken", "bimod", "2lev", "random", "perceptron"]
-    :num_executions: 2
+    :predictors: ["random", "perceptron", "gshare"]
+    :num_executions: 1
     :benchmarks:
       - :name: benchmarks/anagram.alpha
         :args: "benchmarks/words < benchmarks/anagram.in"
